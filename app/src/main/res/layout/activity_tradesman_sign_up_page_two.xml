@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.praduman.humlog.TradesmanSignUpPageTwoActivity"
+    android:background="#ff0aff62">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/tradesmanSignUpPageTwoMobileNumberField"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="60dp"
+        android:background="#ffffffff"
+        android:hint="@string/mobile_number_field_hint_text"
+        android:textSize="30sp"
+        android:singleLine="true"
+        android:maxLength="10" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/tradesmanSignUpPageTwoHouseNumberField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="120dp"
+        android:background="#ffffffff"
+        android:hint="@string/house_no_field_hint_text"
+        android:textSize="30sp"
+        android:singleLine="true"
+        android:maxLength="4" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/customerSignUpPageTwoStreetField"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="180dp"
+        android:background="#ffffffff"
+        android:textSize="30sp"
+        android:singleLine="true"
+        android:hint="@string/street_field_hint_text"
+        android:maxLength="40" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/customerSignUpPageTwoLocalityField"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="240dp"
+        android:background="#ffffffff"
+        android:textSize="30sp"
+        android:singleLine="true"
+        android:hint="@string/locality_field_hint_text"
+        android:maxLength="40" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/customerSignUpPageTwoCitySpinner"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="300dp"
+        android:background="#ffffffff"
+        android:spinnerMode="dropdown" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/customerSignUpPageTwoPostCodeField"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="390dp"
+        android:background="#ffffffff"
+        android:textSize="30sp"
+        android:singleLine="true"
+        android:hint="@string/post_code_field_hint_text" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up_now_button_text"
+        android:id="@+id/customerSignUpPageTwoSignUpNowButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#fff54d70"
+        android:textColor="#ffffffff"
+        android:textSize="30sp" />
+
+</RelativeLayout>
