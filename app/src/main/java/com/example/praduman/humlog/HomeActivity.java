@@ -1,41 +1,29 @@
 package com.example.praduman.humlog;
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 
-public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
+public class HomeActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    private Button proceedButton;
-    private Intent tradesmanSignUpPageTwoIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tradesman_sign_up_page_one);
+        setContentView(R.layout.activity_home);
 
-        tradesmanSignUpPageTwoIntent = new Intent(this, TradesmanSignUpPageTwoActivity.class);
-        proceedButton = (Button) findViewById(R.id.tradesmanSignUpPageOneProceedButton);
-        proceedButtonAction();
-    }
 
-    private void proceedButtonAction(){
-        proceedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(tradesmanSignUpPageTwoIntent);
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tradesman_sign_up_page_one, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -52,5 +40,20 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
     }
 }

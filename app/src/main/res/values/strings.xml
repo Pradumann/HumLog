@@ -33,6 +33,7 @@
 
     <string name="title_activity_tradesman_sign_up_page_one">TradesmanSignUpPageOneActivity</string>
     <string name="title_activity_tradesman_sign_up_page_two">TradesmanSignUpPageTwoActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 
 </resources>

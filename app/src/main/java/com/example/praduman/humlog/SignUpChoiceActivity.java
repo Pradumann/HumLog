@@ -13,14 +13,19 @@ public class SignUpChoiceActivity extends ActionBarActivity {
 
     private Button customerSignUpButton;
     private Intent customerChoiceIntent;
+    private Button tradesmanSignUpButton;
+    private Intent tradesmanChoiceIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_choice);
 
         customerChoiceIntent = new Intent (this , CustomerSignUpPageOneActivity.class);
+        tradesmanChoiceIntent = new Intent(this, TradesmanSignUpPageOneActivity.class);
         customerSignUpButton = (Button) findViewById(R.id.signUpChoiceCustomerSignUpButton);
+        tradesmanSignUpButton = (Button) findViewById(R.id.signUpChoiceTradesmanSignUpButton);
         customerSignUpButtonAction();
+        tradesmanSignUpButtonAction();
     }
 
     private void  customerSignUpButtonAction(){
@@ -28,6 +33,15 @@ public class SignUpChoiceActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 startActivity(customerChoiceIntent);
+            }
+        });
+    }
+
+    private void tradesmanSignUpButtonAction(){
+        tradesmanSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(tradesmanChoiceIntent);
             }
         });
     }
