@@ -33,7 +33,15 @@
 
     <string name="title_activity_tradesman_sign_up_page_one">TradesmanSignUpPageOneActivity</string>
     <string name="title_activity_tradesman_sign_up_page_two">TradesmanSignUpPageTwoActivity</string>
-    <string name="title_activity_home">HomeActivity</string>
 
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="userbar_home_edit_option_text">Edit</string>
+    <string name="application_title">HumLog</string>
+    <string name="selectionbar_home_search_button_text">search</string>
+
+    <string-array name="sampleList">
+        <item>item one</item>
+        <item>item two</item>
+    </string-array>
 
 </resources>
