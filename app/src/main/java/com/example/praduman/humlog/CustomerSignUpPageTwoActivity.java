@@ -4,43 +4,87 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 
 public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
 
     Spinner citySpinner;
+    private HumLogController humLogController;
+    private String firstName;
+    private String lastName;
+    private String password;
+    private String eMail;
+    private String mobileNumber;
+    private String houseNumber;
+    private String street;
+    private String locality;
+    private String city;
+    private String postCode;
+    private String userType;
+    private EditText mobileNumberEditText;
+    private EditText houseNumberEditText;
+    private EditText streetEditText;
+    private EditText localityEditText;
+    private EditText postCodeEditText;
+    private Button signUpButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_sign_up_page_two);
 
+        humLogController = (HumLogController)getIntent().getSerializableExtra("controllerObject");
+        signUpButton = (Button) findViewById(R.id.customerSignUpPageTwoSignUpNowButton);
+        setSpinner();
+        setEditTexts();
+        setActionListeners();
+    }
+    private void setSpinner(){
         citySpinner = (Spinner) findViewById(R.id.customerSignUpPageTwoCitySpinner);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this , R.array.cities, android.R.layout.simple_list_item_1);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         citySpinner.setAdapter(arrayAdapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_customer_sign_up_page_two, menu);
-        return true;
+    private void setEditTexts(){
+        mobileNumberEditText = (EditText) findViewById(R.id.customerSignUpPageTwoMobileNumberField);
+        houseNumberEditText = (EditText) findViewById(R.id.customerSignUpPageTwoHouseNumberField);
+        streetEditText = (EditText) findViewById(R.id.customerSignUpPageTwoStreetField);
+        localityEditText = (EditText) findViewById(R.id.customerSignUpPageTwoLocalityField);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void setActionListeners(){
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUserEssentials();
+                createNewUser();
+            }
+        });
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+    private void setUserEssentials(){
+ /**       firstName = getIntent().getStringExtra("FirstName");
+        lastName = getIntent().getStringExtra("LastName");
+        eMail = getIntent().getStringExtra("Email");
+        password = getIntent().getStringExtra("Password");
+        userType = getIntent().getStringExtra("Type");
+        mobileNumber = mobileNumberEditText.getText().toString();
+        houseNumber = houseNumberEditText.getText().toString();
+        street = streetEditText.getText().toString();
+        locality = localityEditText.getText().toString();
+        city = citySpinner.getSelectedItem().toString();
+        postCode = postCodeEditText.getText().toString();*/
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void createNewUser(){
+        humLogController.setUserEssentials("praduman.raparia" , "98131" , "customer");
+    //    humLogController.createNewUser();
+     //   humLogController.setUserEssentials(eMail , password , userType);
+     //   humLogController.createNewUser();
     }
 }

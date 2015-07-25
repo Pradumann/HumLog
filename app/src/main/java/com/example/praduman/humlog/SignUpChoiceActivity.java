@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.Serializable;
+
 
 public class SignUpChoiceActivity extends ActionBarActivity {
 
@@ -15,29 +17,36 @@ public class SignUpChoiceActivity extends ActionBarActivity {
     private Intent customerChoiceIntent;
     private Button tradesmanSignUpButton;
     private Intent tradesmanChoiceIntent;
+    private HumLogController humLogController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_choice);
-
-        customerChoiceIntent = new Intent (this , CustomerSignUpPageOneActivity.class);
-        tradesmanChoiceIntent = new Intent(this, TradesmanSignUpPageOneActivity.class);
-        customerSignUpButton = (Button) findViewById(R.id.signUpChoiceCustomerSignUpButton);
-        tradesmanSignUpButton = (Button) findViewById(R.id.signUpChoiceTradesmanSignUpButton);
-        customerSignUpButtonAction();
-        tradesmanSignUpButtonAction();
+        humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        setIntentAndButton();
     }
 
-    private void  customerSignUpButtonAction(){
+    private void setIntentAndButton(){
+
+        customerChoiceIntent = new Intent (this , CustomerSignUpPageOneActivity.class);
+        customerChoiceIntent.putExtra("controllerObject" , humLogController );
+
+        tradesmanChoiceIntent = new Intent(this, TradesmanSignUpPageOneActivity.class);
+        tradesmanChoiceIntent.putExtra("controllerObject", humLogController);
+
+        customerSignUpButton = (Button) findViewById(R.id.signUpChoiceCustomerSignUpButton);
+        tradesmanSignUpButton = (Button) findViewById(R.id.signUpChoiceTradesmanSignUpButton);
+        setActionListener();
+    }
+
+    private void setActionListener(){
         customerSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(customerChoiceIntent);
             }
         });
-    }
 
-    private void tradesmanSignUpButtonAction(){
         tradesmanSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,25 +55,4 @@ public class SignUpChoiceActivity extends ActionBarActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sign_up_choice, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
