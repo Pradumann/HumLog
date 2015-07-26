@@ -6,16 +6,14 @@ import java.io.Serializable;
  * Created by Praduman on 23/07/2015.
  */
 public class HumLogController implements Serializable{
-    private transient HumLogModel humLogModel ;
     private transient String username;
     private transient String password;
-    private transient String userType;
+    public transient String userType;
 
-    public HumLogController() {
-        this.humLogModel = new HumLogModel();
-    }
+
     public void createNewUser(){
-        humLogModel.createNewUser(getUsername(), getPassword());
+        HumLogModel humLogModel = new HumLogModel();
+        humLogModel.createNewUser(getUsername() , getPassword());
     }
 
     public void setUserEssentials(String username,String password, String userType){

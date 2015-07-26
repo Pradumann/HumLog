@@ -29,6 +29,5 @@ public class HumLogModel extends Application {
 
             }
         });
-   //  return true;
     }
 }

@@ -55,6 +55,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         houseNumberEditText = (EditText) findViewById(R.id.customerSignUpPageTwoHouseNumberField);
         streetEditText = (EditText) findViewById(R.id.customerSignUpPageTwoStreetField);
         localityEditText = (EditText) findViewById(R.id.customerSignUpPageTwoLocalityField);
+        postCodeEditText = (EditText) findViewById(R.id.customerSignUpPageTwoPostCodeField);
     }
 
     private void setActionListeners(){
@@ -68,7 +69,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
     }
 
     private void setUserEssentials(){
- /**       firstName = getIntent().getStringExtra("FirstName");
+        firstName = getIntent().getStringExtra("FirstName");
         lastName = getIntent().getStringExtra("LastName");
         eMail = getIntent().getStringExtra("Email");
         password = getIntent().getStringExtra("Password");
@@ -78,13 +79,12 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         street = streetEditText.getText().toString();
         locality = localityEditText.getText().toString();
         city = citySpinner.getSelectedItem().toString();
-        postCode = postCodeEditText.getText().toString();*/
+        postCode = postCodeEditText.getText().toString();
     }
 
     private void createNewUser(){
-        humLogController.setUserEssentials("praduman.raparia" , "98131" , "customer");
-    //    humLogController.createNewUser();
-     //   humLogController.setUserEssentials(eMail , password , userType);
-     //   humLogController.createNewUser();
+
+        humLogController.setUserEssentials(eMail , password , userType);
+        humLogController.createNewUser();
     }
 }

@@ -19,13 +19,13 @@ public class LogInActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
         setIntentAndButton();
     }
 
     private void setIntentAndButton(){
         signUpChoiceIntent = new Intent (this , SignUpChoiceActivity.class);
-        humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
-        signUpChoiceIntent.putExtra("controllerObject" , humLogController);
+        signUpChoiceIntent.putExtra("controllerObject", humLogController);
         logInButton = (Button) findViewById(R.id.logInSignInButton);
         signUpButton= (Button) findViewById(R.id.logInSignUpButton);
         setActionListeners();

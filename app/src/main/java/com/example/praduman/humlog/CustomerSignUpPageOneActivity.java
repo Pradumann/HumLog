@@ -33,8 +33,8 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_sign_up_page_one);
-        setEditTexts();
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        setEditTexts();
         setIntentAndButton();
     }
 
