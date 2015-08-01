@@ -3,14 +3,13 @@ package com.example.praduman.humlog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CustomerSignUpPageOneActivity extends ActionBarActivity {
@@ -57,8 +56,31 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if (setAndCheckFields()) {
-                    updateIntent();
-                    startActivity(customerSignUpPageTwoIntent);
+
+                    if (checkString(firstName)) {
+
+                        if (checkString(lastName)) {
+
+                            if (checkEmail(eMail)) {
+
+                                if (checkPassowrd(password , repeatPassword)) {
+                                    updateIntent();
+                                    startActivity(customerSignUpPageTwoIntent);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Password do not match. (password is not case sensitive) ", Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Invalid Email. Fill Email properly ", Toast.LENGTH_LONG).show();
+                            }
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Invalid characters. Fill Last name properly ", Toast.LENGTH_LONG).show();
+                        }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Invalid characters. Fill First name properly ", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), " Fill all the fields ", Toast.LENGTH_LONG).show();
                 }
@@ -85,6 +107,38 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         }
     }
 
+    private boolean checkString(String string){
+            char[] chars = string.toCharArray();
+
+            for (char c : chars) {
+                if(!Character.isLetter(c)) {
+                    return false;
+                }
+            }
+
+            return true;
+    }
+
+    private boolean checkEmail(String eMail){
+        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+        Matcher match = pattern.matcher(eMail);
+
+        if(match.matches()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private boolean checkPassowrd(String password , String repeatPassword){
+        if(password.equalsIgnoreCase(repeatPassword)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     private void updateIntent(){
         customerSignUpPageTwoIntent.putExtra("FirstName" , firstName);
         customerSignUpPageTwoIntent.putExtra("LastName" , lastName);

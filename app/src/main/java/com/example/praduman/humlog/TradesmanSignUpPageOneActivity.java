@@ -7,50 +7,144 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
 
     private Button proceedButton;
     private Intent tradesmanSignUpPageTwoIntent;
+    private HumLogController humLogController;
+    private String firstName;
+    private String lastName;
+    private String eMail;
+    private String password;
+    private String repeatPassword;
+    private String userType;
+    private EditText firstNameEditText;
+    private EditText lastNameEditText;
+    private EditText eMailEditText;
+    private EditText passwordEditText;
+    private EditText repeatPasswordEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tradesman_sign_up_page_one);
-
-        tradesmanSignUpPageTwoIntent = new Intent(this, TradesmanSignUpPageTwoActivity.class);
-        proceedButton = (Button) findViewById(R.id.tradesmanSignUpPageOneProceedButton);
-        proceedButtonAction();
+        humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        setEditTexts();
+        setIntentAndButton();
+    }
+    private void setEditTexts(){
+        firstNameEditText = (EditText) findViewById(R.id.tradesmanSignUpPageOneFirstNameField);
+        lastNameEditText = (EditText) findViewById(R.id.tradesmanSignUpPageOneLastNameField);
+        eMailEditText = (EditText) findViewById(R.id.tradesmanSignUpPageOneEmailField);
+        passwordEditText = (EditText) findViewById(R.id.tradesmanSignUpPageOnePasswordField);
+        repeatPasswordEditText = (EditText) findViewById(R.id.tradesmanSignUpPageOneRepeatPasswordField);
     }
 
-    private void proceedButtonAction(){
+    private void setIntentAndButton(){
+        tradesmanSignUpPageTwoIntent = new Intent (this , TradesmanSignUpPageTwoActivity.class);
+        tradesmanSignUpPageTwoIntent.putExtra("controllerObject", humLogController);
+        proceedButton = (Button) findViewById(R.id.tradesmanSignUpPageOneProceedButton);
+        setActionListener();
+    }
+
+    private void  setActionListener(){
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(tradesmanSignUpPageTwoIntent);
+                if (setAndCheckFields()) {
+
+                    if (checkString(firstName)) {
+
+                        if (checkString(lastName)) {
+
+                            if (checkEmail(eMail)) {
+
+                                if (checkPassowrd(password, repeatPassword)) {
+                                    updateIntent();
+                                    startActivity(tradesmanSignUpPageTwoIntent);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Password do not match. (password is not case sensitive) ", Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Invalid Email. Fill Email properly ", Toast.LENGTH_LONG).show();
+                            }
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Invalid characters. Fill Last name properly ", Toast.LENGTH_LONG).show();
+                        }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Invalid characters. Fill First name properly ", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), " Fill all the fields ", Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tradesman_sign_up_page_one, menu);
-        return true;
-    }
+    private boolean setAndCheckFields(){
+        firstName = firstNameEditText.getText().toString();
+        lastName = lastNameEditText.getText().toString();
+        eMail = eMailEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+        repeatPassword = repeatPasswordEditText.getText().toString();
+        userType = "tradesman";
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(firstName.trim().length()==0 || lastName.trim().length() ==0|| eMail.trim().length()==0
+                || password.trim().length()==0 || repeatPassword.trim().length() ==0){
+            return false;
+        }
+        else{
             return true;
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private boolean checkString(String string){
+        char[] chars = string.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    private boolean checkEmail(String eMail){
+        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+        Matcher match = pattern.matcher(eMail);
+
+        if(match.matches()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private boolean checkPassowrd(String password , String repeatPassword){
+        if(password.equalsIgnoreCase(repeatPassword)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private void updateIntent(){
+        tradesmanSignUpPageTwoIntent.putExtra("FirstName" , firstName);
+        tradesmanSignUpPageTwoIntent.putExtra("LastName" , lastName);
+        tradesmanSignUpPageTwoIntent.putExtra("Email" , eMail);
+        tradesmanSignUpPageTwoIntent.putExtra("Password" , password);
+        tradesmanSignUpPageTwoIntent.putExtra("Type" , userType);
     }
 }

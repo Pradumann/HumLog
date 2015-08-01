@@ -1,5 +1,6 @@
 package com.example.praduman.humlog;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
@@ -62,13 +67,42 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setUserEssentials();
-                createNewUser();
+                if(setAndCheckFields()){
+                    if(checkString(street)){
+                        if(checkString(locality)){
+                            if(!checkCity(city)){
+                                if(checkPostCode(postCode)){
+                                    createNewUser();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext() , "Invalid Post Code" , Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext() , "Select city !!!" , Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext() , "Invalid character. Fill locality properly" , Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext() , "Invalid characters. Fill street field properly"
+                                , Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Fill all fields" , Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
 
-    private void setUserEssentials(){
+    private boolean setAndCheckFields(){
         firstName = getIntent().getStringExtra("FirstName");
         lastName = getIntent().getStringExtra("LastName");
         eMail = getIntent().getStringExtra("Email");
@@ -80,11 +114,55 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         locality = localityEditText.getText().toString();
         city = citySpinner.getSelectedItem().toString();
         postCode = postCodeEditText.getText().toString();
+
+        if(mobileNumber.trim().length()==0 || houseNumber.trim().length() ==0|| street.trim().length()==0
+                || locality.trim().length()==0 || city.trim().length() ==0 || postCode.trim().length()==0){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
+    private boolean checkString(String string){
+        char[] chars = string.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkCity(String city){
+       return city.equalsIgnoreCase("Select city");
+    }
+
+    private boolean checkPostCode(String postCode){
+        String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(postCode);
+        return  matcher.matches();
+    }
     private void createNewUser(){
 
-        humLogController.setUserEssentials(eMail , password , userType);
+        humLogController.setUserEssentials(eMail , password , userType , firstName , lastName
+        , mobileNumber , houseNumber , street , locality ,city , postCode);
         humLogController.createNewUser();
+         startHomeActivity();
+    }
+
+    private void logIn(HumLogModel humLogModel){
+    //    humLogController.logIn(eMail, password, humLogModel);
+    //    startHomeActivity();
+    }
+    private void startHomeActivity(){
+        Intent intent = new Intent(this , HomeActivity.class);
+        intent.putExtra("controllerObject" , humLogController);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

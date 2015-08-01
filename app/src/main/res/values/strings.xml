@@ -43,5 +43,6 @@
         <item>item one</item>
         <item>item two</item>
     </string-array>
+    <string name="title_activity_launcher">LauncherActivity</string>
 
 </resources>

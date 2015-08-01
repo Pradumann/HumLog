@@ -93,6 +93,7 @@
         android:background="#ffffffff"
         android:textSize="30sp"
         android:singleLine="true"
+        android:maxLength="8"
         android:hint="@string/post_code_field_hint_text" />
 
     <Button

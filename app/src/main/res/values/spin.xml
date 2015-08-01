@@ -75,4 +75,13 @@
 
     </string-array>
 
+    <string-array name="trades">
+        <item>Plumber</item>
+        <item>Carpainter</item>
+        <item>Painter</item>
+        <item>Cleaner</item>
+        <item>Electrician</item>
+
+    </string-array>
+
 </resources>
