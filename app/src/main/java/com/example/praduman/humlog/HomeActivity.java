@@ -39,11 +39,12 @@ public class HomeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        /*****************************************************compulsory data to set initially*****************/
+        humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
         setSpinners();
         createTradesmanNavList();
-        // it will gonna be different on the basis of user. One more method.
+     //   createCustomerNavList();
     }
+
 
     /**
      * This method will set the spinners of the home page.
@@ -73,10 +74,19 @@ public class HomeActivity extends ActionBarActivity {
         ArrayAdapter<String> navAdapter = new ArrayAdapter<String>(this, R.layout.nav_list_view, navMenu);
         ListView navList = (ListView)findViewById(R.id.navList);
         navList.setAdapter(navAdapter);
-        setListViewAction();
+        setTradesmanListViewAction();
     }
 
-    private void setListViewAction(){
+    private void createCustomerNavList(){
+        // to do
+        // call set customer list actions
+    }
+
+    /**
+     * This method have action listeners for all of the
+     * items in the navigation list
+     */
+    private void setTradesmanListViewAction(){
         ListView navList = (ListView) findViewById(R.id.navList);
         navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -84,9 +94,27 @@ public class HomeActivity extends ActionBarActivity {
                 TextView textView = (TextView) viewClicked;
                 String stringClicked = textView.getText().toString();
                 if(stringClicked.equalsIgnoreCase("Log Out")){
-                    ParseUser.logOut();
+                    humLogController.logOut();
+                    startLogInActivity();
                 }
             }
         });
+    }
+
+    /**
+     * This method have the action listeners for all the
+     * items in customer navigation list
+     */
+    private void setCustomerListViewAction(){
+        // to do , set the listeners
+    }
+
+
+    private void startLogInActivity(){
+        logInActivityIntent = new Intent(this , LogInActivity.class);
+        logInActivityIntent.putExtra("controllerObject" , humLogController);
+        logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(logInActivityIntent);
     }
 }

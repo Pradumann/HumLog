@@ -34,13 +34,17 @@ public class LauncherActivity extends ActionBarActivity {
     }
 
     /**
-     * Initializing parse objects
+     * Initializing parse datastore.
      */
     private void initializeParse(){
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "LrAF8blaE0GR19ffsr78rHKEH50QBcnZFDSuj9BW", "2UBZlOgM78UNj7AcxcArmuOlxy5y3UstpJP1h9lb");
     }
 
+    /**
+     * This method will fill the intent for LogIn activity, set flag
+     * and start the LogInActivity.
+     */
     private void startLogInActivity(){
         logInActivityIntent = new Intent(this, LogInActivity.class);
         logInActivityIntent.putExtra("controllerObject", humLogController);
@@ -48,6 +52,10 @@ public class LauncherActivity extends ActionBarActivity {
         startActivity(logInActivityIntent);
     }
 
+    /**
+     * This method will fill the intent for Home activity, set flags
+     * and start the Home activity.
+     */
     private void startHomeActivity(){
         homeActivityIntent = new Intent(this , HomeActivity.class);
         homeActivityIntent.putExtra("controllerObject", humLogController);
@@ -56,13 +64,16 @@ public class LauncherActivity extends ActionBarActivity {
     }
 
     /**
-     * This method will set the flags for the intent.
+     * This method will set the flags for log in activity intent intent.
      */
     private void setLogInFlags(){
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
 
+    /**
+     * This method will set flags for Home activity intent.
+     */
     private void setHomeFlags(){
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

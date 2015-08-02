@@ -1,6 +1,7 @@
 package com.example.praduman.humlog;
 
 import com.parse.Parse;
+import com.parse.ParseUser;
 
 import java.io.Serializable;
 
@@ -19,13 +20,33 @@ public class HumLogController implements Serializable {
     private transient String locality;
     private transient String city;
     private transient String postCode;
+    private transient HumLogModel humLogModel;
 
 
-    public void createNewUser(){
-        HumLogModel humLogModel = new HumLogModel();
-        humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
-        createTable(humLogModel);
-        humLogModel.logIn(getUsername(), getPassword());
+    public void createNewUserAndLogIn(){
+        humLogModel = new HumLogModel();
+       humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
+        createTable();
+        logIn(getUsername(), getPassword() , humLogModel);
+    }
+
+    /**
+     * This method will LogIn the user
+     * @param username
+     * @param password
+     */
+    public String logIn (String username, String password , HumLogModel humLogModel){
+        this.username = username;
+        this.password = password;
+        this.humLogModel = humLogModel;
+       return humLogModel.logIn(username, password);
+    }
+
+    /**
+     * This method will LogOut the user
+     */
+    public void logOut(){
+        ParseUser.logOut();
     }
 
     public void setUserEssentials(String eMail,String password, String userType, String fName , String lName
@@ -37,7 +58,7 @@ public class HumLogController implements Serializable {
         setCity(city); setPostCode(postCode);
     }
 
-    private void createTable(HumLogModel humLogModel){
+    private void createTable(){
         if(getUserType().equalsIgnoreCase("customer")){
             humLogModel.createCustomerTable(getUsername() , getFirstName(),
                     getLastName(), getMobileNumber() , getHouseNumber(),

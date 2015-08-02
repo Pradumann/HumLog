@@ -1,3 +1,13 @@
+/**
+ * This class will sign up the new user
+ * who is a customer and navigate the
+ * user to his/her home activity.
+ *
+ * @author Praduman Raparia
+ * @version 1.0
+ * @date 2/8/2015
+ */
+
 package com.example.praduman.humlog;
 
 import android.content.Intent;
@@ -48,6 +58,11 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         setEditTexts();
         setActionListeners();
     }
+
+    /**
+     * This method will set the spinner for city selection
+     * field of the sign up age two.
+     */
     private void setSpinner(){
         citySpinner = (Spinner) findViewById(R.id.customerSignUpPageTwoCitySpinner);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this , R.array.cities, android.R.layout.simple_list_item_1);
@@ -55,6 +70,10 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         citySpinner.setAdapter(arrayAdapter);
     }
 
+    /**
+     * This method will set the Edit texts
+     * for the fields.
+     */
     private void setEditTexts(){
         mobileNumberEditText = (EditText) findViewById(R.id.customerSignUpPageTwoMobileNumberField);
         houseNumberEditText = (EditText) findViewById(R.id.customerSignUpPageTwoHouseNumberField);
@@ -63,6 +82,12 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         postCodeEditText = (EditText) findViewById(R.id.customerSignUpPageTwoPostCodeField);
     }
 
+    /**
+     * This method will set the action listeners
+     * for the sign up button and
+     * eventually navigate the user to his/her
+     * home page.
+     */
     private void setActionListeners(){
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +97,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
                         if(checkString(locality)){
                             if(!checkCity(city)){
                                 if(checkPostCode(postCode)){
-                                    createNewUser();
+                                    createNewUserAndLogIn();
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext() , "Invalid Post Code" , Toast.LENGTH_LONG).show();
@@ -102,6 +127,12 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * This method will set up all the initial data
+     * for the user before signing up and check
+     * whether they are filled properly.
+     * @return boolean (whether fields are filled propely)
+     */
     private boolean setAndCheckFields(){
         firstName = getIntent().getStringExtra("FirstName");
         lastName = getIntent().getStringExtra("LastName");
@@ -124,6 +155,12 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * This method will check whether passed string
+     * have characters only or not.
+     * @param string
+     * @return boolean (whether string have only characetrs)
+     */
     private boolean checkString(String string){
         char[] chars = string.toCharArray();
 
@@ -136,33 +173,50 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * This method will check if
+     * any of the city is selected or not.
+     * @param city
+     * @return bookean (city selected or not)
+     */
     private boolean checkCity(String city){
        return city.equalsIgnoreCase("Select city");
     }
 
+    /**
+     * This method will check if post code is proper or not
+     * according to the patter provided by UK government.
+     * @param postCode
+     * @return boolean (postcode is proper or not)
+     */
     private boolean checkPostCode(String postCode){
         String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(postCode);
         return  matcher.matches();
     }
-    private void createNewUser(){
+
+    /**
+     * This method will create a new user and navigate the
+     * user to home page.
+     */
+    private void createNewUserAndLogIn(){
 
         humLogController.setUserEssentials(eMail , password , userType , firstName , lastName
         , mobileNumber , houseNumber , street , locality ,city , postCode);
-        humLogController.createNewUser();
+        humLogController.createNewUserAndLogIn();
          startHomeActivity();
     }
 
-    private void logIn(HumLogModel humLogModel){
-    //    humLogController.logIn(eMail, password, humLogModel);
-    //    startHomeActivity();
-    }
+    /**
+     * This method will navigate user
+     * to home page.
+     */
     private void startHomeActivity(){
-        Intent intent = new Intent(this , HomeActivity.class);
-        intent.putExtra("controllerObject" , humLogController);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Intent homeActivityIntent = new Intent(this , HomeActivity.class);
+        homeActivityIntent.putExtra("controllerObject" , humLogController);
+        homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeActivityIntent);
     }
 }

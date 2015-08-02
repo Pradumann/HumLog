@@ -1,5 +1,6 @@
 package com.example.praduman.humlog;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -71,7 +72,7 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
                         if(checkString(locality)){
                             if(!checkCity(city)){
                                 if(checkPostCode(postCode)){
-                                    createNewUser();
+                                    createNewUserAndLogIn();
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(), "Invalid Post Code", Toast.LENGTH_LONG).show();
@@ -145,11 +146,24 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         return  matcher.matches();
     }
 
-    private void createNewUser(){
+    private void createNewUserAndLogIn(){
 
         humLogController.setUserEssentials(eMail , password , userType , firstName , lastName
                 , mobileNumber , houseNumber , street , locality ,city , postCode);
-        humLogController.createNewUser();
+        humLogController.createNewUserAndLogIn();
+        startHomeActivity();
+    }
+
+    /**
+     * This method will navigate user
+     * to home page.
+     */
+    private void startHomeActivity(){
+        Intent homeActivityIntent = new Intent(this , HomeActivity.class);
+        homeActivityIntent.putExtra("controllerObject" , humLogController);
+        homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeActivityIntent);
     }
 
 }

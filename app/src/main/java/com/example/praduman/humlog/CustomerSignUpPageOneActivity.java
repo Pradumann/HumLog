@@ -1,3 +1,13 @@
+/**
+ * This class sets the initial data of the
+ * user (which is a customer).
+ *
+ * @author Praduman Raparia
+ * @version 1.0
+ * @date 2/8/2015
+ */
+
+
 package com.example.praduman.humlog;
 
 import android.content.Intent;
@@ -37,6 +47,9 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         setIntentAndButton();
     }
 
+    /**
+     * This method will set the Edit texts.
+     */
     private void setEditTexts(){
         firstNameEditText = (EditText) findViewById(R.id.customerSignUpPageOneFirstNameField);
         lastNameEditText = (EditText) findViewById(R.id.customerSignUpPageOneLastNameField);
@@ -44,6 +57,11 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         passwordEditText = (EditText) findViewById(R.id.customerSignUpPageOnePasswordField);
         repeatPasswordEditText = (EditText) findViewById(R.id.customerSignUpPageOneRepeatPasswordField);
     }
+
+    /**
+     * This method will set the intent for customer signup
+     * page two intent and proceed button.
+     */
     private void setIntentAndButton(){
         customerSignUpPageTwoIntent = new Intent (this , CustomerSignUpPageTwoActivity.class);
         customerSignUpPageTwoIntent.putExtra("controllerObject", humLogController);
@@ -51,6 +69,10 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         setActionListener();
     }
 
+    /**
+     * This method will set the action listener for the button
+     * which will navigate user to customer sign up page two.
+     */
     private void  setActionListener(){
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +84,7 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
                         if (checkString(lastName)) {
 
                             if (checkEmail(eMail)) {
-
+                                    // also have to check if user already exist or not , you know :-)
                                 if (checkPassowrd(password , repeatPassword)) {
                                     updateIntent();
                                     startActivity(customerSignUpPageTwoIntent);
@@ -90,6 +112,10 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * This method will set the fields and check they are filled or not.
+     * @return boolean (whether the fields are filled or not)
+     */
     private boolean setAndCheckFields(){
         firstName = firstNameEditText.getText().toString();
         lastName = lastNameEditText.getText().toString();
@@ -107,6 +133,12 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * The method will check if the given string
+     * contain only characters or not.
+     * @param string
+     * @return boolean (whether string have characters)
+     */
     private boolean checkString(String string){
             char[] chars = string.toCharArray();
 
@@ -119,6 +151,11 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
             return true;
     }
 
+    /**
+     * This method will check if the email is in proper patter or not.
+     * @param eMail
+     * @return boolean (whether email is proper or not)
+     */
     private boolean checkEmail(String eMail){
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher match = pattern.matcher(eMail);
@@ -131,6 +168,12 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * This method will check both passwords are equal or not.
+     * @param password
+     * @param repeatPassword
+     * @return boolean (whether passwords are same or not)
+     */
     private boolean checkPassowrd(String password , String repeatPassword){
         if(password.equalsIgnoreCase(repeatPassword)){
             return true;
@@ -139,6 +182,10 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
             return false;
         }
     }
+
+    /**
+     * This method will put the user data with the intent.
+     */
     private void updateIntent(){
         customerSignUpPageTwoIntent.putExtra("FirstName" , firstName);
         customerSignUpPageTwoIntent.putExtra("LastName" , lastName);

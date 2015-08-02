@@ -1,5 +1,6 @@
 package com.example.praduman.humlog;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -9,14 +10,17 @@ import com.parse.SignUpCallback;
 import com.parse.LogInCallback;
 import com.parse.LogInCallback;
 
+import java.io.Serializable;
+
 
 /**
  * Created by Praduman on 23/07/2015.
  */
 public class HumLogModel extends Application {
 
-    private ParseObject customer;
-    private ParseObject tradesman;
+    private  ParseObject customer;
+    private  ParseObject tradesman;
+    private String success = null;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
@@ -72,17 +76,21 @@ public class HumLogModel extends Application {
         tradesman.saveInBackground();
     }
 
-    public void logIn(String username , String password){
+    public String logIn(String username , String password){
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
-                if(e == null){
+                if (e == null) {
 
-                }
-                else{
-                    // show an error
+                } else {
+                    success = e.getMessage();
                 }
             }
         });
+        return success;
+    }
+
+    public void logOut(){
+        ParseUser.logOut();
     }
 }

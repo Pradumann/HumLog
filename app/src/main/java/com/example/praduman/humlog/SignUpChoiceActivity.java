@@ -26,6 +26,11 @@ public class SignUpChoiceActivity extends ActionBarActivity {
         setIntentAndButton();
     }
 
+    /**
+     * This method will set the intent for the
+     * customer choice, tradesman choice intent
+     * and the buttons.
+     */
     private void setIntentAndButton(){
 
         customerChoiceIntent = new Intent (this , CustomerSignUpPageOneActivity.class);
@@ -39,6 +44,9 @@ public class SignUpChoiceActivity extends ActionBarActivity {
         setActionListener();
     }
 
+    /**
+     * This method will set the action listeners for the buttons.
+     */
     private void setActionListener(){
         customerSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
