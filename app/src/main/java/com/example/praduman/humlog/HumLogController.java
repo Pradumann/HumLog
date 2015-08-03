@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Praduman on 23/07/2015.
  */
 public class HumLogController implements Serializable {
-    private transient String username;
+    private transient String username = "";
     private transient String password;
     public transient String userType;
     private transient String firstName;
@@ -23,11 +23,23 @@ public class HumLogController implements Serializable {
     private transient HumLogModel humLogModel;
 
 
+    public void createModelObject(){
+
+    }
+
+    public String getStatus(){
+        if(username.equals("")){
+            return "online";
+        }
+        else{
+            return "offline";
+        }
+    }
+
     public void createNewUserAndLogIn(){
-        humLogModel = new HumLogModel();
-       humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
-        createTable();
-        logIn(getUsername(), getPassword() , humLogModel);
+        this.humLogModel = new HumLogModel();
+       this.humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
+        createTable(); // i.e. set data
     }
 
     /**
@@ -35,18 +47,29 @@ public class HumLogController implements Serializable {
      * @param username
      * @param password
      */
-    public String logIn (String username, String password , HumLogModel humLogModel){
-        this.username = username;
-        this.password = password;
-        this.humLogModel = humLogModel;
-       return humLogModel.logIn(username, password);
+    public String logIn (String username, String password ){
+        this.humLogModel = new HumLogModel();
+        if (checkUser(username).equalsIgnoreCase("correct")){
+            this.username = username;
+            if(checkPassword(password , username).equalsIgnoreCase("correct")){
+                this.password = password;
+                // set rest of data
+                return "success";
+            }
+            else{
+                return "Incorrect password";
+            }
+        }
+        else {
+            return "User do not exist";
+        }
     }
 
     /**
      * This method will LogOut the user
      */
     public void logOut(){
-        ParseUser.logOut();
+        this.username = "";
     }
 
     public void setUserEssentials(String eMail,String password, String userType, String fName , String lName
@@ -58,6 +81,9 @@ public class HumLogController implements Serializable {
         setCity(city); setPostCode(postCode);
     }
 
+    /**
+     * This method will create table either customer or tradesman.
+     */
     private void createTable(){
         if(getUserType().equalsIgnoreCase("customer")){
             humLogModel.createCustomerTable(getUsername() , getFirstName(),
@@ -73,6 +99,13 @@ public class HumLogController implements Serializable {
         }
     }
 
+    private String checkUser(String username){
+      return  humLogModel.checkUser(username);
+    }
+
+    private String checkPassword(String password , String username){
+       return  humLogModel.checkPassword(password, username);
+    }
 
 
 

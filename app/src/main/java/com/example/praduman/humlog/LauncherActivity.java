@@ -14,8 +14,8 @@ public class LauncherActivity extends ActionBarActivity {
 
     private Intent logInActivityIntent;
     private Intent homeActivityIntent;
-    HumLogController humLogController;
-    ParseUser currentUser;
+    private HumLogController humLogController;
+    private String logInStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +23,9 @@ public class LauncherActivity extends ActionBarActivity {
         setContentView(R.layout.activity_launcher);
         initializeParse();
         humLogController = new HumLogController();
-        currentUser = ParseUser.getCurrentUser();
+        logInStatus = humLogController.getStatus();
 
-        if (currentUser == null) {
+        if (logInStatus.equalsIgnoreCase("online")) {
             startLogInActivity();
         }
         else {

@@ -203,7 +203,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
     private void createNewUserAndLogIn(){
 
         humLogController.setUserEssentials(eMail , password , userType , firstName , lastName
-        , mobileNumber , houseNumber , street , locality ,city , postCode);
+                , mobileNumber , houseNumber , street , locality ,city , postCode);
         humLogController.createNewUserAndLogIn();
          startHomeActivity();
     }

@@ -2,9 +2,13 @@ package com.example.praduman.humlog;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.util.Log;
+
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.parse.LogInCallback;
@@ -18,31 +22,23 @@ import java.io.Serializable;
  */
 public class HumLogModel extends Application {
 
-    private  ParseObject customer;
-    private  ParseObject tradesman;
-    private String success = null;
+    private   ParseObject customer;
+    private   ParseObject tradesman;
+    private   ParseObject user;
+    public    String userSuccess ;
+    public    String passwordSuccess;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
         tradesman = new ParseObject("Tradesman");
-    }
-    @Override
-    public void onCreate(){
-
+        user = new ParseObject("User");
     }
 
     public void createNewUser(String username, String password , String userType){
-
-        ParseUser newUser = new ParseUser();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.put("usertype" , userType);
-        newUser.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-
-            }
-        });
+        user.put("username" , username);
+        user.put("password" , password);
+        user.put("userType" , userType);
+        user.saveInBackground();
     }
 
     public void createCustomerTable(String username , String fName , String lName , String mobileNumber,
@@ -56,7 +52,7 @@ public class HumLogModel extends Application {
         customer.put("Street", street);
         customer.put("Locality", locality);
         customer.put("City", city);
-        customer.put("PostCode" , postCode);
+        customer.put("PostCode", postCode);
         customer.saveInBackground();
 
     }
@@ -76,21 +72,40 @@ public class HumLogModel extends Application {
         tradesman.saveInBackground();
     }
 
-    public String logIn(String username , String password){
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                if (e == null) {
+    public String checkUser(final String username) {
 
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        query.whereEqualTo("username", username);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (object == null) {
+                    Log.d("score", "The getFirst request failed.");
+                    HumLogModel.this.userSuccess = "incorrect";
                 } else {
-                    success = e.getMessage();
+                    Log.d("score", "The getFirst request is success");
+                    HumLogModel.this.userSuccess = "correct";
                 }
             }
         });
-        return success;
+            return "correct";
     }
 
-    public void logOut(){
-        ParseUser.logOut();
+    public String checkPassword(final String password , String username){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        query.whereEqualTo("username", username);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (password.equalsIgnoreCase(object.getString("password"))) {
+                    Log.d("pass check", "password check passed");
+                    HumLogModel.this.passwordSuccess = "correct";
+                    Log.d("password status", passwordSuccess + "..?");
+                } else {
+                    Log.d("pass check", "password check failed");
+                    HumLogModel.this.passwordSuccess = "incorrect";
+                }
+            }
+        });
+
+        return "correct";
     }
 }

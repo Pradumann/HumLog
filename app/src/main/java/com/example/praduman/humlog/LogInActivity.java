@@ -53,8 +53,10 @@ public class LogInActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if(setAndCheckFields()){
-                    error = humLogController.logIn(username , password , new HumLogModel());
-                   if(error == null){
+                    // check for internet connection ....
+                    error = humLogController.logIn(username , password);
+                   if(error.equalsIgnoreCase("success")){
+                       // to do log in alll .....
                        setFlags();
                        startActivity(homeActivityIntent);
                    }

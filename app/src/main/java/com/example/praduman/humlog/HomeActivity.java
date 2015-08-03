@@ -43,6 +43,7 @@ public class HomeActivity extends ActionBarActivity {
         setSpinners();
         createTradesmanNavList();
      //   createCustomerNavList();
+        // set get details of user, name , etc.
     }
 
 
@@ -110,6 +111,9 @@ public class HomeActivity extends ActionBarActivity {
     }
 
 
+    /**
+     * This method will start the log In activity.
+     */
     private void startLogInActivity(){
         logInActivityIntent = new Intent(this , LogInActivity.class);
         logInActivityIntent.putExtra("controllerObject" , humLogController);
