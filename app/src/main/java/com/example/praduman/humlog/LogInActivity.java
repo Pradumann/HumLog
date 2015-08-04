@@ -102,7 +102,7 @@ public class LogInActivity extends ActionBarActivity {
      * @param password
      * @return boolean (fields filled or not)
      */
-    private boolean checkFields(String username , String password){
+    public boolean checkFields(String username , String password){
         if(username.trim().length() == 0 || password.trim().length() == 0){
             return false;
         }

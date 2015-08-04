@@ -25,8 +25,8 @@ public class HumLogModel extends Application {
     private   ParseObject customer;
     private   ParseObject tradesman;
     private   ParseObject user;
-    public    String userSuccess ;
-    public    String passwordSuccess;
+    private   String userSuccess ;
+    private   String passwordSuccess;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
@@ -76,36 +76,37 @@ public class HumLogModel extends Application {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username", username);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (object == null) {
-                    Log.d("score", "The getFirst request failed.");
-                    HumLogModel.this.userSuccess = "incorrect";
-                } else {
-                    Log.d("score", "The getFirst request is success");
-                    HumLogModel.this.userSuccess = "correct";
-                }
+        try
+        {
+            ParseObject object = query.getFirst();
+            if (object == null) {
+                HumLogModel.this.userSuccess = "incorrect";
+            } else {
+                HumLogModel.this.userSuccess = "correct";
             }
-        });
-            return "correct";
+        }
+        catch(Exception e)
+        {
+
+        }
+         return userSuccess;
     }
 
     public String checkPassword(final String password , String username){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username", username);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (password.equalsIgnoreCase(object.getString("password"))) {
-                    Log.d("pass check", "password check passed");
-                    HumLogModel.this.passwordSuccess = "correct";
-                    Log.d("password status", passwordSuccess + "..?");
-                } else {
-                    Log.d("pass check", "password check failed");
-                    HumLogModel.this.passwordSuccess = "incorrect";
-                }
+        try {
+            ParseObject object = query.getFirst();
+            if (password.equalsIgnoreCase(object.getString("password"))) {
+                HumLogModel.this.passwordSuccess = "correct";
+            } else {
+                HumLogModel.this.passwordSuccess = "incorrect";
             }
-        });
+        }
+        catch (Exception e){
 
-        return "correct";
+        }
+
+        return passwordSuccess;
     }
 }
