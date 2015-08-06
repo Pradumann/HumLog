@@ -20,11 +20,11 @@ import java.io.Serializable;
 /**
  * Created by Praduman on 23/07/2015.
  */
-public class HumLogModel extends Application implements Serializable {
+public class HumLogModel extends Application{
 
-    private  transient ParseObject customer;
-    private  transient ParseObject tradesman;
-    private  transient ParseObject user;
+    private   ParseObject customer;
+    private   ParseObject tradesman;
+    private   ParseObject user;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
@@ -131,8 +131,72 @@ public class HumLogModel extends Application implements Serializable {
         });
     }
 
-    public void logOut(){
-        ParseUser.logOut();
+    public String getUserType(String username){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        query.whereEqualTo("username", username);
+        try {
+            ParseObject object = query.getFirst();
+            return object.getString("userType");
+        }
+        catch (Exception e){
+            return e.getMessage();
+        }
     }
+
+    /**
+     * This method will return the first name on the
+     * basis of username and customer type.
+     * @param username
+     * @param userType
+     * @return
+     */
+    public String getFirstName(String username , String userType){
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("FirstName");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("FirstName");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+
+    }
+
+   /** public String getLastName(String username , String userType){
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("LastName");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("LastName");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }*/
 
 }

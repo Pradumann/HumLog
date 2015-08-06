@@ -3,21 +3,19 @@ package com.example.praduman.humlog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
 
-
-public class LauncherActivity extends ActionBarActivity implements Serializable{
+public class LauncherActivity extends ActionBarActivity {
 
     private Intent logInActivityIntent;
     private Intent homeActivityIntent;
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private ParseUser currentUser;
     private String username;
 
@@ -29,13 +27,11 @@ public class LauncherActivity extends ActionBarActivity implements Serializable{
         currentUser = ParseUser.getCurrentUser();
 
         if (currentUser == null) {
-            humLogModel = new HumLogModel();
             humLogController = new HumLogController();
             startLogInActivity();
         }
         else {
             username = currentUser.getUsername();
-            humLogModel = new HumLogModel();
             humLogController = new HumLogController();
             startHomeActivity();
         }
@@ -55,7 +51,6 @@ public class LauncherActivity extends ActionBarActivity implements Serializable{
      */
     private void startLogInActivity(){
         logInActivityIntent = new Intent(this, LogInActivity.class);
-        logInActivityIntent.putExtra("modelObject" , humLogModel);
         logInActivityIntent.putExtra("controllerObject", humLogController);
         setLogInFlags();
         startActivity(logInActivityIntent);
@@ -67,7 +62,6 @@ public class LauncherActivity extends ActionBarActivity implements Serializable{
      */
     private void startHomeActivity(){
         homeActivityIntent = new Intent(this , HomeActivity.class);
-        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject", humLogController);
         homeActivityIntent.putExtra("username" , username);
         setHomeFlags();

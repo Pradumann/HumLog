@@ -31,30 +31,36 @@ import com.parse.ParseUser;
 public class HomeActivity extends ActionBarActivity {
 
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private Intent logInActivityIntent;
     private Spinner citySpinner;
     private Spinner tradesSpinner;
+    private TextView firstNameTextView;
     private String username;
-    private String password;
+    private String userType;
+    private String firstName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
-        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
-        humLogController.setModelObject(humLogModel);
-        username = getIntent().getStringExtra("password");
-     //   password = getIntent().getStringExtra("password");
-     //   humLogController.logIn(username , password);
-
+        humLogController.setModelObject();
+        username = getIntent().getStringExtra("username");
+        setDetails();
         setSpinners();
-        createTradesmanNavList();
-     //   createCustomerNavList();
-        // set get details of user, name , etc.
+        setFirstNameText();
+        setNavigationList();
     }
 
+    private void setDetails(){
+        humLogController.setDetails(username);
+        userType = humLogController.getUserType();
+        firstName = humLogController.getFirstName();
+    }
 
+    private void setFirstNameText(){
+        firstNameTextView = (TextView) findViewById(R.id.userbarFirstNameText);
+        firstNameTextView.setText(firstName);
+    }
     /**
      * This method will set the spinners of the home page.
      * One spinner will be city spinner and other is trade spinner.
@@ -73,13 +79,22 @@ public class HomeActivity extends ActionBarActivity {
 
     }
 
+    private void setNavigationList(){
+        if(userType.equalsIgnoreCase("customer")){
+            createCustomerNavList();
+        }else{
+            createTradesmanNavList();
+        }
+
+
+    }
 
     /**
      * The method will create a navigation list for the
      * navigation slider of the home page.
      */
     private void createTradesmanNavList(){
-        String [] navMenu = {"Message List" , "Edit Profile" , "Edit Trades" , "Ratings" , "Log Out"};
+        String [] navMenu = {"" , "Home"  ,"Edit Profile" , "Edit Trades" , "Ratings" , "Log Out"};
         ArrayAdapter<String> navAdapter = new ArrayAdapter<String>(this, R.layout.nav_list_view, navMenu);
         ListView navList = (ListView)findViewById(R.id.navList);
         navList.setAdapter(navAdapter);
@@ -87,8 +102,11 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void createCustomerNavList(){
-        // to do
-        // call set customer list actions
+        String [] navMenu = {"" , "Home"  ,"Edit Profile" , "Post Ad" , "Ratings" , "Log Out"};
+        ArrayAdapter<String> navAdapter = new ArrayAdapter<String>(this, R.layout.nav_list_view, navMenu);
+        ListView navList = (ListView)findViewById(R.id.navList);
+        navList.setAdapter(navAdapter);
+        setCustomerListViewAction();
     }
 
     /**
@@ -106,6 +124,18 @@ public class HomeActivity extends ActionBarActivity {
                     humLogController.logOut();
                     startLogInActivity();
                 }
+                else if (stringClicked.equalsIgnoreCase("Edit Profile")){
+                    // do something
+                }
+                else if(stringClicked.equalsIgnoreCase("Edit Trades")){
+                    // do something
+                }
+                else if (stringClicked.equalsIgnoreCase("Ratings")){
+                    // do something
+                }
+                else{
+                    // close list
+                }
             }
         });
     }
@@ -115,7 +145,31 @@ public class HomeActivity extends ActionBarActivity {
      * items in customer navigation list
      */
     private void setCustomerListViewAction(){
-        // to do , set the listeners
+
+        ListView navList = (ListView) findViewById(R.id.navList);
+        navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
+                TextView textView = (TextView) viewClicked;
+                String stringClicked = textView.getText().toString();
+                if(stringClicked.equalsIgnoreCase("Log Out")){
+                    humLogController.logOut();
+                    startLogInActivity();
+                }
+                else if (stringClicked.equalsIgnoreCase("Edit Profile")){
+                    // do something
+                }
+                else if(stringClicked.equalsIgnoreCase("Post Ad")){
+                    // do something
+                }
+                else if (stringClicked.equalsIgnoreCase("Ratings")){
+                    // do something
+                }
+                else{
+                    // close list
+                }
+            }
+        });
     }
 
 
@@ -125,7 +179,6 @@ public class HomeActivity extends ActionBarActivity {
     private void startLogInActivity(){
         logInActivityIntent = new Intent(this , LogInActivity.class);
         logInActivityIntent.putExtra("controllerObject" , humLogController);
-        logInActivityIntent.putExtra("modelObject" , humLogModel);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(logInActivityIntent);

@@ -23,14 +23,25 @@
         android:layout_marginTop="0dp">
 
         <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/application_title"
+        android:id="@+id/userbarHomeTitleText"
+        android:textColor="#ffffffff"
+        android:textSize="40sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/application_title"
-            android:id="@+id/userbarHomeTitleText"
+            android:id="@+id/userbarFirstNameText"
             android:textColor="#ffffffff"
-            android:textSize="40sp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginStart="100dp"/>
+            android:textSize="25sp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -85,6 +96,6 @@
         android:layout_gravity="left|start"
         android:background="#ffeeeeee"
         android:divider="@android:color/transparent"
-        android:dividerHeight="50.0sp" />
+        android:dividerHeight="40.0sp" />
 
 </android.support.v4.widget.DrawerLayout>

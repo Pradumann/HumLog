@@ -20,7 +20,6 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
 
     Spinner citySpinner;
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private String firstName;
     private String lastName;
     private String password;
@@ -42,9 +41,8 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tradesman_sign_up_page_two);
-        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController)getIntent().getSerializableExtra("controllerObject");
-        humLogController.setModelObject(humLogModel);
+        humLogController.setModelObject();
         signUpButton = (Button) findViewById(R.id.tradesmanSignUpPageTwoSignUpNowButton);
         setSpinner();
         setEditTexts();
@@ -74,6 +72,7 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
                         if(checkString(locality)){
                             if(!checkCity(city)){
                                 if(checkPostCode(postCode)){
+
                                     createNewUserAndLogIn();
                                 }
                                 else{
@@ -162,7 +161,6 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
      */
     private void startHomeActivity(){
         Intent homeActivityIntent = new Intent(this , HomeActivity.class);
-        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject" , humLogController);
         homeActivityIntent.putExtra("username" , eMail);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

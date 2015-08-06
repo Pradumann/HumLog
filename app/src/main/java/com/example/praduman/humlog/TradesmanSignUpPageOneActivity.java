@@ -19,7 +19,6 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
     private Button proceedButton;
     private Intent tradesmanSignUpPageTwoIntent;
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private String firstName;
     private String lastName;
     private String eMail;
@@ -35,9 +34,7 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tradesman_sign_up_page_one);
-        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
-        humLogController.setModelObject(humLogModel);
         setEditTexts();
         setIntentAndButton();
     }
@@ -51,7 +48,6 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
 
     private void setIntentAndButton(){
         tradesmanSignUpPageTwoIntent = new Intent (this , TradesmanSignUpPageTwoActivity.class);
-        tradesmanSignUpPageTwoIntent.putExtra("modelObject" , humLogModel);
         tradesmanSignUpPageTwoIntent.putExtra("controllerObject", humLogController);
         proceedButton = (Button) findViewById(R.id.tradesmanSignUpPageOneProceedButton);
         setActionListener();

@@ -30,7 +30,6 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
 
     Spinner citySpinner;
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private String firstName;
     private String lastName;
     private String password;
@@ -52,9 +51,8 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_sign_up_page_two);
-        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController)getIntent().getSerializableExtra("controllerObject");
-        humLogController.setModelObject(humLogModel);
+        humLogController.setModelObject();
         signUpButton = (Button) findViewById(R.id.customerSignUpPageTwoSignUpNowButton);
         setSpinner();
         setEditTexts();
@@ -216,7 +214,6 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
      */
     private void startHomeActivity(){
         Intent homeActivityIntent = new Intent(this , HomeActivity.class);
-        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject" , humLogController);
         homeActivityIntent.putExtra("username" , eMail);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

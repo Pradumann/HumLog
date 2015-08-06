@@ -24,7 +24,7 @@ public class HumLogController implements Serializable {
 
 
     public void createNewUserAndLogIn(){
-       humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
+        humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
         humLogModel.logIn (getUsername() , getPassword());
         createTable();
     }
@@ -61,11 +61,11 @@ public class HumLogController implements Serializable {
      * This method will LogOut the user
      */
     public void logOut(){
-        humLogModel.logOut();
+        ParseUser.logOut();
     }
 
     public void logIn(String username , String password){
-        humLogModel.logIn(username , password);
+        humLogModel.logIn(username, password);
     }
 
     public void setUserEssentials(String eMail,String password, String userType, String fName , String lName
@@ -103,8 +103,16 @@ public class HumLogController implements Serializable {
        return  humLogModel.checkPassword(password, username);
     }
 
-
-
+    /**
+     * This method will set the details for the home activity
+     * @param username
+     */
+    public void setDetails(String username){
+        this.username = username;
+        setUserType(humLogModel.getUserType(username));
+        setFirstName(humLogModel.getFirstName(username, userType));
+      //  setLastName(humLogModel.getLastName (username , userType));
+    }
 
     /**
      * setters and getter.
@@ -143,42 +151,42 @@ public class HumLogController implements Serializable {
     public void setPostCode(String postCode){
         this.postCode = postCode;
     }
-    public void setModelObject(HumLogModel humLogModel){
-        this.humLogModel = humLogModel;
+    public void setModelObject(){
+        this.humLogModel = new HumLogModel();
     }
 
 
-    private String getUsername(){
+    public String getUsername(){
         return username;
     }
-    private String getPassword(){
+    public String getPassword(){
         return password;
     }
-    private String getUserType(){
+    public String getUserType(){
         return userType;
     }
-    private String getFirstName(){
+    public String getFirstName(){
         return firstName;
     }
-    private String getLastName(){
+    public String getLastName(){
         return lastName;
     }
-    private String getMobileNumber(){
+    public String getMobileNumber(){
         return mobileNumber;
     }
-    private String getHouseNumber(){
+    public String getHouseNumber(){
         return houseNumber;
     }
-    private String getStreet(){
+    public String getStreet(){
         return street;
     }
-    private String getLocality(){
+    public String getLocality(){
         return locality;
     }
-    private String getCity(){
+    public String getCity(){
         return city;
     }
-    private String getPostCode(){
+    public String getPostCode(){
         return postCode;
     }
 

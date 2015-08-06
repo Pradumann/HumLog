@@ -22,15 +22,13 @@ public class LogInActivity extends ActionBarActivity {
     private EditText usernameTextField;
     private EditText passwordTextField;
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private String error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
-        humLogController.setModelObject(humLogModel);
+        humLogController.setModelObject();
         setIntentAndButton();
     }
 
@@ -39,10 +37,8 @@ public class LogInActivity extends ActionBarActivity {
      */
     private void setIntentAndButton(){
         signUpChoiceIntent = new Intent (this , SignUpChoiceActivity.class);
-        signUpChoiceIntent.putExtra("modelObject" , humLogModel);
         signUpChoiceIntent.putExtra("controllerObject", humLogController);
         homeActivityIntent = new Intent(this , HomeActivity.class);
-        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject", humLogController);
         logInButton = (Button) findViewById(R.id.logInSignInButton);
         signUpButton= (Button) findViewById(R.id.logInSignUpButton);
@@ -63,7 +59,6 @@ public class LogInActivity extends ActionBarActivity {
                    if(error.equalsIgnoreCase("success")){
                        humLogController.logIn(username , password);
                        homeActivityIntent.putExtra("username", username);
-                       homeActivityIntent.putExtra("password" , password);
                        setFlags();
                        startActivity(homeActivityIntent);
                    }

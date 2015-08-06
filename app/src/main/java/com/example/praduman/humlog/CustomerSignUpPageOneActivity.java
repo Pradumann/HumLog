@@ -27,7 +27,6 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
     private Button proceedButton;
     private Intent customerSignUpPageTwoIntent;
     private HumLogController humLogController;
-    private HumLogModel humLogModel;
     private String firstName;
     private String lastName;
     private String eMail;
@@ -43,9 +42,7 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_sign_up_page_one);
-        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
-        humLogController.setModelObject(humLogModel);
         setEditTexts();
         setIntentAndButton();
     }
@@ -67,7 +64,6 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
      */
     private void setIntentAndButton(){
         customerSignUpPageTwoIntent = new Intent (this , CustomerSignUpPageTwoActivity.class);
-        customerSignUpPageTwoIntent.putExtra("modelObject" , humLogModel);
         customerSignUpPageTwoIntent.putExtra("controllerObject", humLogController);
         proceedButton = (Button) findViewById(R.id.customerSignUpPageOneProceedButton);
         setActionListener();
@@ -92,12 +88,6 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
                                 if (checkPassowrd(password , repeatPassword)) {
                                     updateIntent();
                                     startActivity(customerSignUpPageTwoIntent);
-                                  /**  if(humLogController.checkUser(eMail).equalsIgnoreCase("incorrect")){
-
-                                    }
-                                    else{
-                                        Toast.makeText(getApplicationContext(), "Username already exist ", Toast.LENGTH_LONG).show();
-                                    }*/
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Password do not match. (password is not case sensitive) ", Toast.LENGTH_LONG).show();
                                 }
