@@ -22,12 +22,15 @@ public class LogInActivity extends ActionBarActivity {
     private EditText usernameTextField;
     private EditText passwordTextField;
     private HumLogController humLogController;
+    private HumLogModel humLogModel;
     private String error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        humLogController.setModelObject(humLogModel);
         setIntentAndButton();
     }
 
@@ -36,8 +39,10 @@ public class LogInActivity extends ActionBarActivity {
      */
     private void setIntentAndButton(){
         signUpChoiceIntent = new Intent (this , SignUpChoiceActivity.class);
+        signUpChoiceIntent.putExtra("modelObject" , humLogModel);
         signUpChoiceIntent.putExtra("controllerObject", humLogController);
         homeActivityIntent = new Intent(this , HomeActivity.class);
+        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject", humLogController);
         logInButton = (Button) findViewById(R.id.logInSignInButton);
         signUpButton= (Button) findViewById(R.id.logInSignUpButton);
@@ -54,9 +59,11 @@ public class LogInActivity extends ActionBarActivity {
             public void onClick(View v) {
                 if(setAndCheckFields()){
                     // check for internet connection ....
-                    error = humLogController.logIn(username , password);
+                    error = humLogController.checkUser(username, password);
                    if(error.equalsIgnoreCase("success")){
-                       // to do log in alll .....
+                       humLogController.logIn(username , password);
+                       homeActivityIntent.putExtra("username", username);
+                       homeActivityIntent.putExtra("password" , password);
                        setFlags();
                        startActivity(homeActivityIntent);
                    }

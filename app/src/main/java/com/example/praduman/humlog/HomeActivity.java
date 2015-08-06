@@ -31,15 +31,23 @@ import com.parse.ParseUser;
 public class HomeActivity extends ActionBarActivity {
 
     private HumLogController humLogController;
+    private HumLogModel humLogModel;
     private Intent logInActivityIntent;
     private Spinner citySpinner;
     private Spinner tradesSpinner;
-    private ParseUser currentUser;
+    private String username;
+    private String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
+        humLogController.setModelObject(humLogModel);
+        username = getIntent().getStringExtra("password");
+     //   password = getIntent().getStringExtra("password");
+     //   humLogController.logIn(username , password);
+
         setSpinners();
         createTradesmanNavList();
      //   createCustomerNavList();
@@ -117,6 +125,7 @@ public class HomeActivity extends ActionBarActivity {
     private void startLogInActivity(){
         logInActivityIntent = new Intent(this , LogInActivity.class);
         logInActivityIntent.putExtra("controllerObject" , humLogController);
+        logInActivityIntent.putExtra("modelObject" , humLogModel);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(logInActivityIntent);

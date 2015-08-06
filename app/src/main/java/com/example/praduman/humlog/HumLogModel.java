@@ -20,13 +20,11 @@ import java.io.Serializable;
 /**
  * Created by Praduman on 23/07/2015.
  */
-public class HumLogModel extends Application {
+public class HumLogModel extends Application implements Serializable {
 
-    private   ParseObject customer;
-    private   ParseObject tradesman;
-    private   ParseObject user;
-    private   String userSuccess ;
-    private   String passwordSuccess;
+    private  transient ParseObject customer;
+    private  transient ParseObject tradesman;
+    private  transient ParseObject user;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
@@ -36,9 +34,23 @@ public class HumLogModel extends Application {
 
     public void createNewUser(String username, String password , String userType){
         user.put("username" , username);
-        user.put("password" , password);
-        user.put("userType" , userType);
+        user.put("password", password);
+        user.put("userType", userType);
         user.saveInBackground();
+
+        ParseUser newUser = new ParseUser();
+        newUser.setUsername(username);
+        newUser.setPassword(password);
+        newUser.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Hooray! Let them use the app now.
+                } else {
+                    // Sign up didn't succeed. Look at the ParseException
+                    // to figure out what went wrong
+                }
+            }
+        });
     }
 
     public void createCustomerTable(String username , String fName , String lName , String mobileNumber,
@@ -80,16 +92,15 @@ public class HumLogModel extends Application {
         {
             ParseObject object = query.getFirst();
             if (object == null) {
-                HumLogModel.this.userSuccess = "incorrect";
+                return  "incorrect";
             } else {
-                HumLogModel.this.userSuccess = "correct";
+                return  "correct";
             }
         }
         catch(Exception e)
         {
-
+                return e.getMessage();
         }
-         return userSuccess;
     }
 
     public String checkPassword(final String password , String username){
@@ -98,15 +109,30 @@ public class HumLogModel extends Application {
         try {
             ParseObject object = query.getFirst();
             if (password.equalsIgnoreCase(object.getString("password"))) {
-                HumLogModel.this.passwordSuccess = "correct";
+                return "correct";
             } else {
-                HumLogModel.this.passwordSuccess = "incorrect";
+                return "incorrect";
             }
         }
         catch (Exception e){
-
+                return e.getMessage();
         }
-
-        return passwordSuccess;
     }
+
+    public void logIn(String username , String password){
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            public void done(ParseUser user, ParseException e) {
+                if (user != null) {
+                    // Hooray! The user is logged in.
+                } else {
+                    // Signup failed. Look at the ParseException to see what happened.
+                }
+            }
+        });
+    }
+
+    public void logOut(){
+        ParseUser.logOut();
+    }
+
 }

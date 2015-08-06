@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Praduman on 23/07/2015.
  */
 public class HumLogController implements Serializable {
-    private transient String username = "";
+    private transient String username;
     private transient String password;
     public transient String userType;
     private transient String firstName;
@@ -23,23 +23,10 @@ public class HumLogController implements Serializable {
     private transient HumLogModel humLogModel;
 
 
-    public void createModelObject(){
-
-    }
-
-    public String getStatus(){
-        if(username.equals("")){
-            return "online";
-        }
-        else{
-            return "offline";
-        }
-    }
-
     public void createNewUserAndLogIn(){
-        this.humLogModel = new HumLogModel();
-       this.humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
-        createTable(); // i.e. set data
+       humLogModel.createNewUser(getUsername(), getPassword(), getUserType());
+        humLogModel.logIn (getUsername() , getPassword());
+        createTable();
     }
 
     /**
@@ -47,21 +34,26 @@ public class HumLogController implements Serializable {
      * @param username
      * @param password
      */
-    public String logIn (String username, String password ){
-        this.humLogModel = new HumLogModel();
-        if (checkUser(username).equalsIgnoreCase("correct")){
+    public String checkUser (String username, String password ){
+        String userMessage = checkUser(username);
+        if (userMessage.equalsIgnoreCase("correct")){
             this.username = username;
-            if(checkPassword(password , username).equalsIgnoreCase("correct")){
-                this.password = password;
-                // set rest of data
+            String passwordMessage = checkPassword(password , username);
+            if(passwordMessage.equalsIgnoreCase("correct")){
                 return "success";
             }
-            else{
+            else if (passwordMessage.equalsIgnoreCase("incorrect")){
                 return "Incorrect password";
             }
+            else{
+                return passwordMessage;
+            }
+        }
+        else if (userMessage.equalsIgnoreCase("incorrect")){
+            return "User do not exist";
         }
         else {
-            return "User do not exist";
+            return userMessage;
         }
     }
 
@@ -69,7 +61,11 @@ public class HumLogController implements Serializable {
      * This method will LogOut the user
      */
     public void logOut(){
-        this.username = "";
+        humLogModel.logOut();
+    }
+
+    public void logIn(String username , String password){
+        humLogModel.logIn(username , password);
     }
 
     public void setUserEssentials(String eMail,String password, String userType, String fName , String lName
@@ -99,7 +95,7 @@ public class HumLogController implements Serializable {
         }
     }
 
-    private String checkUser(String username){
+    public String checkUser(String username){
       return  humLogModel.checkUser(username);
     }
 
@@ -147,6 +143,10 @@ public class HumLogController implements Serializable {
     public void setPostCode(String postCode){
         this.postCode = postCode;
     }
+    public void setModelObject(HumLogModel humLogModel){
+        this.humLogModel = humLogModel;
+    }
+
 
     private String getUsername(){
         return username;

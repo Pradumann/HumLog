@@ -19,6 +19,7 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
     private Button proceedButton;
     private Intent tradesmanSignUpPageTwoIntent;
     private HumLogController humLogController;
+    private HumLogModel humLogModel;
     private String firstName;
     private String lastName;
     private String eMail;
@@ -34,7 +35,9 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tradesman_sign_up_page_one);
+        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        humLogController.setModelObject(humLogModel);
         setEditTexts();
         setIntentAndButton();
     }
@@ -48,6 +51,7 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
 
     private void setIntentAndButton(){
         tradesmanSignUpPageTwoIntent = new Intent (this , TradesmanSignUpPageTwoActivity.class);
+        tradesmanSignUpPageTwoIntent.putExtra("modelObject" , humLogModel);
         tradesmanSignUpPageTwoIntent.putExtra("controllerObject", humLogController);
         proceedButton = (Button) findViewById(R.id.tradesmanSignUpPageOneProceedButton);
         setActionListener();
@@ -68,6 +72,13 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
                                 if (checkPassowrd(password, repeatPassword)) {
                                     updateIntent();
                                     startActivity(tradesmanSignUpPageTwoIntent);
+                                  /**  if(humLogController.checkUser(eMail).equalsIgnoreCase("incorrect")){
+
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(), "Username already exist ", Toast.LENGTH_LONG).show();
+                                    }*/
+
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Password do not match. (password is not case sensitive) ", Toast.LENGTH_LONG).show();
                                 }
@@ -109,7 +120,7 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
         }
     }
 
-    private boolean checkString(String string){
+    public boolean checkString(String string){
         char[] chars = string.toCharArray();
 
         for (char c : chars) {
@@ -120,7 +131,7 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
 
         return true;
     }
-    private boolean checkEmail(String eMail){
+    public boolean checkEmail(String eMail){
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher match = pattern.matcher(eMail);
 
@@ -132,7 +143,7 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
         }
     }
 
-    private boolean checkPassowrd(String password , String repeatPassword){
+    public boolean checkPassowrd(String password , String repeatPassword){
         if(password.equalsIgnoreCase(repeatPassword)){
             return true;
         }

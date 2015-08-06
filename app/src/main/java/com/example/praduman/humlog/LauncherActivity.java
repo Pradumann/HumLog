@@ -9,26 +9,34 @@ import android.view.MenuItem;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 
-public class LauncherActivity extends ActionBarActivity {
+
+public class LauncherActivity extends ActionBarActivity implements Serializable{
 
     private Intent logInActivityIntent;
     private Intent homeActivityIntent;
     private HumLogController humLogController;
-    private String logInStatus;
+    private HumLogModel humLogModel;
+    private ParseUser currentUser;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
         initializeParse();
-        humLogController = new HumLogController();
-        logInStatus = humLogController.getStatus();
+        currentUser = ParseUser.getCurrentUser();
 
-        if (logInStatus.equalsIgnoreCase("online")) {
+        if (currentUser == null) {
+            humLogModel = new HumLogModel();
+            humLogController = new HumLogController();
             startLogInActivity();
         }
         else {
+            username = currentUser.getUsername();
+            humLogModel = new HumLogModel();
+            humLogController = new HumLogController();
             startHomeActivity();
         }
     }
@@ -47,6 +55,7 @@ public class LauncherActivity extends ActionBarActivity {
      */
     private void startLogInActivity(){
         logInActivityIntent = new Intent(this, LogInActivity.class);
+        logInActivityIntent.putExtra("modelObject" , humLogModel);
         logInActivityIntent.putExtra("controllerObject", humLogController);
         setLogInFlags();
         startActivity(logInActivityIntent);
@@ -58,7 +67,9 @@ public class LauncherActivity extends ActionBarActivity {
      */
     private void startHomeActivity(){
         homeActivityIntent = new Intent(this , HomeActivity.class);
+        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject", humLogController);
+        homeActivityIntent.putExtra("username" , username);
         setHomeFlags();
         startActivity(homeActivityIntent);
     }
@@ -78,5 +89,4 @@ public class LauncherActivity extends ActionBarActivity {
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
-
 }

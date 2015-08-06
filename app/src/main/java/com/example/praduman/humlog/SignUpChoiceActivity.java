@@ -18,11 +18,14 @@ public class SignUpChoiceActivity extends ActionBarActivity {
     private Button tradesmanSignUpButton;
     private Intent tradesmanChoiceIntent;
     private HumLogController humLogController;
+    private HumLogModel humLogModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_choice);
-        humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
+        humLogController = (HumLogController)getIntent().getSerializableExtra("controllerObject");
+        humLogController.setModelObject(humLogModel);
         setIntentAndButton();
     }
 
@@ -34,9 +37,11 @@ public class SignUpChoiceActivity extends ActionBarActivity {
     private void setIntentAndButton(){
 
         customerChoiceIntent = new Intent (this , CustomerSignUpPageOneActivity.class);
+        customerChoiceIntent.putExtra("modelObject" , humLogModel);
         customerChoiceIntent.putExtra("controllerObject" , humLogController );
 
         tradesmanChoiceIntent = new Intent(this, TradesmanSignUpPageOneActivity.class);
+        tradesmanChoiceIntent.putExtra("modelObject" , humLogModel);
         tradesmanChoiceIntent.putExtra("controllerObject", humLogController);
 
         customerSignUpButton = (Button) findViewById(R.id.signUpChoiceCustomerSignUpButton);

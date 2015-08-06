@@ -30,6 +30,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
 
     Spinner citySpinner;
     private HumLogController humLogController;
+    private HumLogModel humLogModel;
     private String firstName;
     private String lastName;
     private String password;
@@ -51,8 +52,9 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_sign_up_page_two);
-
+        humLogModel = (HumLogModel) getIntent().getSerializableExtra("modelObject");
         humLogController = (HumLogController)getIntent().getSerializableExtra("controllerObject");
+        humLogController.setModelObject(humLogModel);
         signUpButton = (Button) findViewById(R.id.customerSignUpPageTwoSignUpNowButton);
         setSpinner();
         setEditTexts();
@@ -179,7 +181,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
      * @param city
      * @return bookean (city selected or not)
      */
-    private boolean checkCity(String city){
+    public boolean checkCity(String city){
        return city.equalsIgnoreCase("Select city");
     }
 
@@ -189,7 +191,7 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
      * @param postCode
      * @return boolean (postcode is proper or not)
      */
-    private boolean checkPostCode(String postCode){
+    public boolean checkPostCode(String postCode){
         String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(postCode);
@@ -214,7 +216,9 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
      */
     private void startHomeActivity(){
         Intent homeActivityIntent = new Intent(this , HomeActivity.class);
+        homeActivityIntent.putExtra("modelObject" , humLogModel);
         homeActivityIntent.putExtra("controllerObject" , humLogController);
+        homeActivityIntent.putExtra("username" , eMail);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeActivityIntent);
