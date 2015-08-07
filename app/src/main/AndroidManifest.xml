@@ -67,6 +67,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PostAdActivity"
+            android:label="@string/title_activity_post_ad" >
+        </activity>
     </application>
 
 </manifest>

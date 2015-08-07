@@ -25,11 +25,13 @@ public class HumLogModel extends Application{
     private   ParseObject customer;
     private   ParseObject tradesman;
     private   ParseObject user;
+    private   ParseObject advertisement;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
         tradesman = new ParseObject("Tradesman");
         user = new ParseObject("User");
+        advertisement = new ParseObject("Advertisement");
     }
 
     public void createNewUser(String username, String password , String userType){
@@ -198,5 +200,17 @@ public class HumLogModel extends Application{
             }
         }
     }*/
+
+    public String postAd(String username , String trade , String ad){
+        try{
+            advertisement.put("Username" , username);
+            advertisement.put("Trade" , trade);
+            advertisement.put("Ad" , ad);
+            advertisement.saveInBackground();
+            return "success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
 
 }

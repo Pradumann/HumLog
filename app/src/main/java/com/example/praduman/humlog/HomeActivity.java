@@ -32,6 +32,7 @@ public class HomeActivity extends ActionBarActivity {
 
     private HumLogController humLogController;
     private Intent logInActivityIntent;
+    private Intent postAdActivityIntent;
     private Spinner citySpinner;
     private Spinner tradesSpinner;
     private TextView firstNameTextView;
@@ -120,20 +121,16 @@ public class HomeActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 TextView textView = (TextView) viewClicked;
                 String stringClicked = textView.getText().toString();
-                if(stringClicked.equalsIgnoreCase("Log Out")){
+                if (stringClicked.equalsIgnoreCase("Log Out")) {
                     humLogController.logOut();
                     startLogInActivity();
-                }
-                else if (stringClicked.equalsIgnoreCase("Edit Profile")){
+                } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
                     // do something
-                }
-                else if(stringClicked.equalsIgnoreCase("Edit Trades")){
+                } else if (stringClicked.equalsIgnoreCase("Edit Trades")) {
                     // do something
-                }
-                else if (stringClicked.equalsIgnoreCase("Ratings")){
+                } else if (stringClicked.equalsIgnoreCase("Ratings")) {
                     // do something
-                }
-                else{
+                } else {
                     // close list
                 }
             }
@@ -160,7 +157,7 @@ public class HomeActivity extends ActionBarActivity {
                     // do something
                 }
                 else if(stringClicked.equalsIgnoreCase("Post Ad")){
-                    // do something
+                    startPostAdActivity();
                 }
                 else if (stringClicked.equalsIgnoreCase("Ratings")){
                     // do something
@@ -182,5 +179,12 @@ public class HomeActivity extends ActionBarActivity {
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(logInActivityIntent);
+    }
+
+    private void startPostAdActivity(){
+        postAdActivityIntent = new Intent(this, PostAdActivity.class);
+        postAdActivityIntent.putExtra("username" , username);
+        postAdActivityIntent.putExtra("controllerObject" , humLogController);
+        startActivity(postAdActivityIntent);
     }
 }

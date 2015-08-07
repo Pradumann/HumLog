@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.praduman.humlog.PostAdActivity"
+    android:background="#ff0aff62">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/post_ad_activity_select_trade_title"
+        android:id="@+id/postadSelectTradeTitle"
+        android:textColor="#ffffffff"
+        android:textSize="25sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postadSelectTradeSpinner"
+        android:layout_below="@+id/postadSelectTradeTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/postadSelectTradeTitle"
+        android:layout_alignEnd="@+id/postadSelectTradeTitle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/post_ad_multiline_text_view"
+        android:id="@+id/postadDetailTextView"
+        android:layout_below="@+id/postadSelectTradeSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="87dp"
+        android:textColor="#ffffffff"
+        android:textSize="25sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/postadMultilineTextView"
+        android:layout_below="@+id/postadDetailTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:textColor="#ff000000"
+        android:hint="@string/post_ad_multiline_text_view_hint"
+        android:background="#ffffffff"
+        android:maxLines="4"
+        android:lines="4"
+        android:singleLine="false"
+        android:maxLength="100"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/post_ad_post_ad_button_text"
+        android:id="@+id/postadPostAdButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#fff54d70"
+        android:textColor="#ffffffff"
+        android:textSize="20sp" />
+</RelativeLayout>

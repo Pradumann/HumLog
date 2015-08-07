@@ -76,8 +76,9 @@
     </string-array>
 
     <string-array name="trades">
+        <item>Select Trade</item>
         <item>Plumber</item>
-        <item>Carpainter</item>
+        <item>Carpenter</item>
         <item>Painter</item>
         <item>Cleaner</item>
         <item>Electrician</item>

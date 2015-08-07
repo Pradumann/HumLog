@@ -114,6 +114,15 @@ public class HumLogController implements Serializable {
       //  setLastName(humLogModel.getLastName (username , userType));
     }
 
+    public String postAd(String username , String trade , String ad){
+        String message = humLogModel.postAd(username , trade , ad);
+        if(message.equalsIgnoreCase("success")){
+            return "success";
+        }else {
+            return message;
+        }
+    }
+
     /**
      * setters and getter.
      * @param username
