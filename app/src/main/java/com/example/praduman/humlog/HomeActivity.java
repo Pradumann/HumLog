@@ -9,14 +9,11 @@
 
 package com.example.praduman.humlog;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
+
 import android.content.Intent;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,28 +21,26 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.parse.Parse;
-import com.parse.ParseUser;
-
 
 public class HomeActivity extends ActionBarActivity {
 
     private HumLogController humLogController;
     private Intent logInActivityIntent;
     private Intent postAdActivityIntent;
+    private Intent EditProfileActivityIntent;
     private Spinner citySpinner;
     private Spinner tradesSpinner;
     private TextView firstNameTextView;
     private String username;
     private String userType;
     private String firstName;
+    private String lastName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
         humLogController.setModelObject();
-        username = getIntent().getStringExtra("username");
         setDetails();
         setSpinners();
         setFirstNameText();
@@ -53,9 +48,11 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void setDetails(){
+        username = getIntent().getStringExtra("username");
         humLogController.setDetails(username);
         userType = humLogController.getUserType();
         firstName = humLogController.getFirstName();
+        lastName = humLogController.getLastName();
     }
 
     private void setFirstNameText(){
@@ -103,7 +100,7 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void createCustomerNavList(){
-        String [] navMenu = {"" , "Home"  ,"Edit Profile" , "Post Ad" , "Ratings" , "Log Out"};
+        String [] navMenu = {"" , "My Interests"  ,"My Ad's" , "Post Ad" , "Edit Profile" , "Log Out"};
         ArrayAdapter<String> navAdapter = new ArrayAdapter<String>(this, R.layout.nav_list_view, navMenu);
         ListView navList = (ListView)findViewById(R.id.navList);
         navList.setAdapter(navAdapter);
@@ -154,7 +151,7 @@ public class HomeActivity extends ActionBarActivity {
                     startLogInActivity();
                 }
                 else if (stringClicked.equalsIgnoreCase("Edit Profile")){
-                    // do something
+                    startEditProfileActivity();
                 }
                 else if(stringClicked.equalsIgnoreCase("Post Ad")){
                     startPostAdActivity();
@@ -183,8 +180,18 @@ public class HomeActivity extends ActionBarActivity {
 
     private void startPostAdActivity(){
         postAdActivityIntent = new Intent(this, PostAdActivity.class);
-        postAdActivityIntent.putExtra("username" , username);
-        postAdActivityIntent.putExtra("controllerObject" , humLogController);
+        postAdActivityIntent.putExtra("username", username);
+        postAdActivityIntent.putExtra("controllerObject", humLogController);
         startActivity(postAdActivityIntent);
+    }
+
+    private void startEditProfileActivity(){
+        EditProfileActivityIntent = new Intent(this , EditProfileActivity.class);
+        EditProfileActivityIntent.putExtra("username" , username);
+        EditProfileActivityIntent.putExtra("userType" , userType);
+        EditProfileActivityIntent.putExtra("firstName" , firstName);
+        EditProfileActivityIntent.putExtra("lastName" , lastName);
+        EditProfileActivityIntent.putExtra("controllerObject" , humLogController);
+        startActivity(EditProfileActivityIntent);
     }
 }

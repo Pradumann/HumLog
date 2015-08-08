@@ -19,14 +19,20 @@
         android:layout_alignParentEnd="true" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/postadSelectTradeSpinner"
         android:layout_below="@+id/postadSelectTradeTitle"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/postadSelectTradeTitle"
-        android:layout_alignEnd="@+id/postadSelectTradeTitle" />
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/postadSelectCitySpinner"
+        android:layout_below="@+id/postadSelectTradeTitle"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,7 +63,7 @@
         android:maxLines="4"
         android:lines="4"
         android:singleLine="false"
-        android:maxLength="100"/>
+        android:maxLength="120"/>
 
     <Button
         android:layout_width="match_parent"
@@ -70,4 +76,5 @@
         android:background="#fff54d70"
         android:textColor="#ffffffff"
         android:textSize="20sp" />
+
 </RelativeLayout>

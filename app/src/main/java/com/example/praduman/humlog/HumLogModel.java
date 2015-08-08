@@ -86,6 +86,19 @@ public class HumLogModel extends Application{
         tradesman.saveInBackground();
     }
 
+    public String postAd(String username , String trade ,String city , String ad){
+        try{
+            advertisement.put("Username" , username);
+            advertisement.put("Trade" , trade);
+            advertisement.put("City" , city);
+            advertisement.put("Ad" , ad);
+            advertisement.saveInBackground();
+            return "success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
     public String checkUser(final String username) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
@@ -177,7 +190,7 @@ public class HumLogModel extends Application{
 
     }
 
-   /** public String getLastName(String username , String userType){
+    public String getLastName(String username , String userType){
         if(userType.equalsIgnoreCase("customer")){
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
             query.whereEqualTo("Username", username);
@@ -199,18 +212,167 @@ public class HumLogModel extends Application{
                 return e.getMessage();
             }
         }
-    }*/
+    }
 
-    public String postAd(String username , String trade , String ad){
+
+    public String getPassword(String username ){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        query.whereEqualTo("username", username);
         try{
-            advertisement.put("Username" , username);
-            advertisement.put("Trade" , trade);
-            advertisement.put("Ad" , ad);
-            advertisement.saveInBackground();
-            return "success";
+            ParseObject object = query.getFirst();
+            return object.getString("password");
         }catch (Exception e){
             return e.getMessage();
         }
     }
 
+    public String getHouseNumber(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("HouseNo");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("HouseNo");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }
+
+    public String getMobileNumber(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("MobileNumber");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("MobileNumber");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }
+
+    public String getStreet(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("Street");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("Street");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }
+
+    public String getLocality(String username , String  userType){
+
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("Locality");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("Locality");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }
+
+    public String getPostCode(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("PostCode");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("PostCode");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }
+
+    public String getCity(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("City");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+
+        }
+        else{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            try{
+                ParseObject object = query.getFirst();
+                return object.getString("City");
+            }catch (Exception e){
+                return e.getMessage();
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="cities">
-        <item>Select city</item>
+        <item>Select City</item>
         <item>Aberdeen</item>
         <item>Armagh</item>
         <item>Bangor</item>

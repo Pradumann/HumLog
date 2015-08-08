@@ -10,6 +10,7 @@
 
 package com.example.praduman.humlog;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -85,26 +86,26 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
 
                             if (checkEmail(eMail)) {
 
-                                if (checkPassowrd(password , repeatPassword)) {
+                                if (checkPassowrd(password, repeatPassword)) {
                                     updateIntent();
                                     startActivity(customerSignUpPageTwoIntent);
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Password do not match. (password is not case sensitive) ", Toast.LENGTH_LONG).show();
+                                    showError("Passwords do not match");
                                 }
 
                             } else {
-                                Toast.makeText(getApplicationContext(), "Invalid Email. Fill Email properly ", Toast.LENGTH_LONG).show();
+                                showError("Invalid Email. Fill Email properly");
                             }
 
                         } else {
-                            Toast.makeText(getApplicationContext(), "Invalid characters. Fill Last name properly ", Toast.LENGTH_LONG).show();
+                            showError("Invalid characters. Fill Last name properly");
                         }
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Invalid characters. Fill First name properly ", Toast.LENGTH_LONG).show();
+                        showError("Invalid characters. Fill First name properly");
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), " Fill all the fields ", Toast.LENGTH_LONG).show();
+                    showError("Fill all the fields");
                 }
 
 
@@ -194,4 +195,11 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         customerSignUpPageTwoIntent.putExtra("Type" , userType);
     }
 
+    private void showError(String message){
+        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(CustomerSignUpPageOneActivity.this);
+        errorBuilder.setMessage(message)
+                .setTitle("Error").setPositiveButton("OK", null);
+        AlertDialog dialog = errorBuilder.create();
+        dialog.show();
+    }
 }

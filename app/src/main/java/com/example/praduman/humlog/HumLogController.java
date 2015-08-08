@@ -111,16 +111,26 @@ public class HumLogController implements Serializable {
         this.username = username;
         setUserType(humLogModel.getUserType(username));
         setFirstName(humLogModel.getFirstName(username, userType));
-      //  setLastName(humLogModel.getLastName (username , userType));
+        setLastName(humLogModel.getLastName (username , userType));
     }
 
-    public String postAd(String username , String trade , String ad){
-        String message = humLogModel.postAd(username , trade , ad);
+    public String postAd(String username , String trade ,String city , String ad){
+        String message = humLogModel.postAd(username , trade ,city , ad);
         if(message.equalsIgnoreCase("success")){
             return "success";
         }else {
             return message;
         }
+    }
+
+    public void setOldData(String username , String userType){
+        setPassword(humLogModel.getPassword(username ));
+        setHouseNumber(humLogModel.getHouseNumber(username , userType));
+        setMobileNumber(humLogModel.getMobileNumber(username , userType));
+        setStreet(humLogModel.getStreet(username , userType));
+        setLocality(humLogModel.getLocality(username , userType));
+        setPostCode(humLogModel.getPostCode(username , userType));
+        setCity(humLogModel.getCity(username , userType));
     }
 
     /**

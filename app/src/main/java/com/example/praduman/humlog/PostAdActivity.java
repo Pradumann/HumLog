@@ -16,6 +16,7 @@ import android.widget.Toast;
 public class PostAdActivity extends Activity {
 
     private Spinner tradesSpinner;
+    private Spinner citySpinner;
     private HumLogController humLogController;
     private Intent homeActivityIntent;
     private String username;
@@ -26,7 +27,7 @@ public class PostAdActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_ad);
         setWindow();
-        setSpinner();
+        setSpinners();
         setEditText();
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
         humLogController.setModelObject();
@@ -42,11 +43,16 @@ public class PostAdActivity extends Activity {
         getWindow().setLayout((int) (width * .9), (int) (height * .9));
     }
 
-    private void setSpinner(){
+    private void setSpinners(){
         tradesSpinner = (Spinner) findViewById(R.id.postadSelectTradeSpinner);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this , R.array.trades, android.R.layout.simple_list_item_1);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         tradesSpinner.setAdapter(arrayAdapter);
+
+        citySpinner = (Spinner) findViewById(R.id.postadSelectCitySpinner);
+        ArrayAdapter<CharSequence> arrayAdapter2 = ArrayAdapter.createFromResource(this , R.array.cities, android.R.layout.simple_list_item_1);
+        arrayAdapter2.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        citySpinner.setAdapter(arrayAdapter2);
     }
 
     private void setEditText(){
@@ -59,10 +65,11 @@ public class PostAdActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String trade = tradesSpinner.getSelectedItem().toString();
+                String city = citySpinner.getSelectedItem().toString();
                 String details = adDetailEditText.getText().toString();
-                if(trade.equalsIgnoreCase("Select Trade")){
+                if(trade.equalsIgnoreCase("Select Trade")|| city.equalsIgnoreCase("Select city")){
                     AlertDialog.Builder errorBuilder = new AlertDialog.Builder(PostAdActivity.this);
-                    errorBuilder.setMessage("Select a trade")
+                    errorBuilder.setMessage("Select both trade and city")
                             .setTitle("Error").setPositiveButton("OK" , null);
                     AlertDialog dialog = errorBuilder.create();
                     dialog.show();
@@ -75,7 +82,7 @@ public class PostAdActivity extends Activity {
                         AlertDialog dialog = errorBuilder.create();
                         dialog.show();
                     }else{
-                        String message = postAdvertisement(username , trade , details);
+                        String message = postAdvertisement(username , trade , city , details);
                         if(message.equalsIgnoreCase("success")){
                             Toast.makeText(PostAdActivity.this , "Your ad have been posted" , Toast.LENGTH_LONG).show();
                             startHomeActivity();
@@ -92,8 +99,8 @@ public class PostAdActivity extends Activity {
         });
     }
 
-    private String postAdvertisement(String username , String trade , String details){
-        String message = humLogController.postAd(username, trade, details);
+    private String postAdvertisement(String username , String trade , String city ,String details){
+        String message = humLogController.postAd(username, trade, city , details);
         if(message.equalsIgnoreCase("success")){
             return "success";
         }else {

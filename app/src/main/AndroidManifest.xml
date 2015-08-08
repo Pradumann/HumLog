@@ -71,6 +71,14 @@
             android:name=".PostAdActivity"
             android:label="@string/title_activity_post_ad" >
         </activity>
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.praduman.humlog.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -20,7 +20,7 @@
     <string name="proceed_button_text">proceed</string>
 
     <string name="title_activity_customer_sign_up_page_two">CustomerSignUpPageTwo</string>
-    <string name="mobile_number_field_hint_text">Enter 10 digit mobile number</string>
+    <string name="mobile_number_field_hint_text">10 digit mobile number</string>
     <string name="house_no_field_hint_text">House N0.</string>
     <string name="street_field_hint_text">Street</string>
     <string name="locality_field_hint_text">Locality</string>
@@ -45,9 +45,13 @@
     </string-array>
     <string name="title_activity_launcher">LauncherActivity</string>
     <string name="title_activity_post_ad">PostAdActivity</string>
-    <string name = "post_ad_activity_select_trade_title">Select one trade for the advertisement</string>
-    <string name="post_ad_multiline_text_view">Write some details about your ad in less than 80 characters</string>
+    <string name = "post_ad_activity_select_trade_title">Select one trade and city for the advertisement</string>
+    <string name="post_ad_multiline_text_view">Write some details about your ad in less than 120 characters</string>
     <string name="post_ad_multiline_text_view_hint">Write ad details</string>
     <string name="post_ad_post_ad_button_text">Post Ad</string>
 
+
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="edit_profile_save_changes_button_text">Save Changes</string>
+    <string name="edit_profile_delete_account_button_text">Delete Account</string>
 </resources>

@@ -10,6 +10,7 @@
 
 package com.example.praduman.humlog;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -100,27 +101,26 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
                                     createNewUserAndLogIn();
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext() , "Invalid Post Code" , Toast.LENGTH_LONG).show();
+                                   showError("Invalid Post Code. All letters should be capital");
                                 }
 
                             }
                             else{
-                                Toast.makeText(getApplicationContext() , "Select city !!!" , Toast.LENGTH_LONG).show();
+                                showError("Select city !!!");
                             }
 
                         }
                         else {
-                            Toast.makeText(getApplicationContext() , "Invalid character. Fill locality properly" , Toast.LENGTH_LONG).show();
+                            showError("Invalid character. Fill locality properly");
                         }
                     }
                     else {
-                        Toast.makeText(getApplicationContext() , "Invalid characters. Fill street field properly"
-                                , Toast.LENGTH_LONG).show();
+                        showError("Invalid characters. Fill street field properly");
                     }
 
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Fill all fields" , Toast.LENGTH_LONG).show();
+                    showError("Fill all fields");
                 }
 
             }
@@ -219,5 +219,13 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeActivityIntent);
+    }
+
+    private void showError(String message){
+        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(CustomerSignUpPageTwoActivity.this);
+        errorBuilder.setMessage(message)
+                .setTitle("Error").setPositiveButton("OK", null);
+        AlertDialog dialog = errorBuilder.create();
+        dialog.show();
     }
 }

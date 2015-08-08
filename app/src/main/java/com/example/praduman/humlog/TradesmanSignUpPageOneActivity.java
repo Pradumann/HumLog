@@ -1,5 +1,6 @@
 package com.example.praduman.humlog;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -68,30 +69,30 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
                                 if (checkPassowrd(password, repeatPassword)) {
                                     updateIntent();
                                     startActivity(tradesmanSignUpPageTwoIntent);
-                                  /**  if(humLogController.checkUser(eMail).equalsIgnoreCase("incorrect")){
+                                    /**  if(humLogController.checkUser(eMail).equalsIgnoreCase("incorrect")){
 
-                                    }
-                                    else{
-                                        Toast.makeText(getApplicationContext(), "Username already exist ", Toast.LENGTH_LONG).show();
-                                    }*/
+                                     }
+                                     else{
+                                     Toast.makeText(getApplicationContext(), "Username already exist ", Toast.LENGTH_LONG).show();
+                                     }*/
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Password do not match. (password is not case sensitive) ", Toast.LENGTH_LONG).show();
+                                    showError("Password do not match");
                                 }
 
                             } else {
-                                Toast.makeText(getApplicationContext(), "Invalid Email. Fill Email properly ", Toast.LENGTH_LONG).show();
+                                showError("Invalid Email. Fill Email properly ");
                             }
 
                         } else {
-                            Toast.makeText(getApplicationContext(), "Invalid characters. Fill Last name properly ", Toast.LENGTH_LONG).show();
+                            showError("Invalid characters. Fill Last name properly ");
                         }
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Invalid characters. Fill First name properly ", Toast.LENGTH_LONG).show();
+                        showError("Invalid characters. Fill First name properly ");
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), " Fill all the fields ", Toast.LENGTH_LONG).show();
+                    showError(" Fill all the fields ");
                 }
 
 
@@ -153,5 +154,13 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
         tradesmanSignUpPageTwoIntent.putExtra("Email" , eMail);
         tradesmanSignUpPageTwoIntent.putExtra("Password" , password);
         tradesmanSignUpPageTwoIntent.putExtra("Type" , userType);
+    }
+
+    private void showError(String message){
+        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(TradesmanSignUpPageOneActivity.this);
+        errorBuilder.setMessage(message)
+                .setTitle("Error").setPositiveButton("OK", null);
+        AlertDialog dialog = errorBuilder.create();
+        dialog.show();
     }
 }

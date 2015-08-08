@@ -22,7 +22,6 @@ public class LauncherActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launcher);
         initializeParse();
         currentUser = ParseUser.getCurrentUser();
 
