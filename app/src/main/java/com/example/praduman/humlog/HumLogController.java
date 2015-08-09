@@ -133,6 +133,38 @@ public class HumLogController implements Serializable {
         setCity(humLogModel.getCity(username , userType));
     }
 
+    public String setNewData(){
+        if(userType.equalsIgnoreCase("customer")){
+            String returnMessage = humLogModel.setNewDataInCustomerTable(username , firstName , lastName,
+                    mobileNumber , houseNumber , street , locality , city , postCode);
+            if(returnMessage.equalsIgnoreCase("success")){
+                String passwordMessage = humLogModel.setNewPassword(username , password);
+                if(passwordMessage.equalsIgnoreCase("success")){
+                    return "success";
+                }else {
+                    return passwordMessage;
+                }
+            }else {
+                return returnMessage;
+            }
+        }else {
+
+            String returnMessage = humLogModel.setNewDataInTradesman(username , firstName , lastName
+            , mobileNumber , houseNumber , street , locality , city , postCode);
+            if(returnMessage.equalsIgnoreCase("success")){
+                String passwordMessage = humLogModel.setNewPassword(username , password);
+                if(passwordMessage.equalsIgnoreCase("success")){
+                    return "success";
+                }else {
+                    return passwordMessage;
+                }
+            }else {
+                return returnMessage;
+            }
+        }
+
+    }
+
     /**
      * setters and getter.
      * @param username

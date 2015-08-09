@@ -375,4 +375,71 @@ public class HumLogModel extends Application{
             }
         }
     }
+
+    public String setNewDataInCustomerTable(String username , String fName , String lName,
+                                            String mobileNumber , String hNo
+    , String street , String locality , String city , String postCode){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            object.put("FirstName", fName);
+            object.put("LastName", lName);
+            object.put("MobileNumber", mobileNumber);
+            object.put("HouseNo", hNo);
+            object.put("Street", street);
+            object.put("Locality", locality);
+            object.put("City", city);
+            object.put("PostCode", postCode);
+            object.saveInBackground();
+            return "success";
+
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
+    public String setNewDataInTradesman(String username , String fName , String lName ,
+                                        String mobileNumber , String hNo , String street ,
+                                        String locality , String city , String postCode){
+
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            object.put("FirstName", fName);
+            object.put("LastName", lName);
+            object.put("MobileNumber", mobileNumber);
+            object.put("HouseNo", hNo);
+            object.put("Street", street);
+            object.put("Locality", locality);
+            object.put("City", city);
+            object.put("PostCode", postCode);
+            object.saveInBackground();
+            return "success";
+
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+    public String setNewPassword(String username , String password){
+
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+            query.whereEqualTo("username", username);
+            ParseObject object = query.getFirst();
+            object.put("password", password);
+            object.saveInBackground();
+
+            ParseQuery<ParseUser> userQuery = ParseQuery.getQuery("_User");
+            userQuery.whereEqualTo("username" , username);
+            ParseUser user = userQuery.getFirst();
+            user.put("password" , password);
+            user.saveInBackground();
+            return "success";
+
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
 }
