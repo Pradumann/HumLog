@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ff0aff62"
+    android:padding="2dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/tradeLinearLayout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_ad_row_trade_text"
+        android:id="@+id/myAdRowTradeText"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:textColor="#ff000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myAdRowTrade"
+        android:padding="5dp"
+        android:textSize="30sp"
+        android:textColor="#ff000000" />
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/cityLinearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_ad_row_city_text"
+            android:id="@+id/myAdRowCityText"
+            android:textSize="20sp"
+            android:padding="2dp"
+            android:textColor="#ff000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/myAdRowCity"
+            android:padding="5dp"
+            android:textSize="30sp"
+            android:textColor="#ff000000" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/myAdRowAdText"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffffff"
+        android:textSize="30sp"
+        android:padding="10dp"
+        android:maxLength="120" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/my_ad_row_delete_ad_button_text"
+        android:id="@+id/myAdRowDeleteAdButton"
+        android:background="#ff000000"
+        android:textColor="#ffffffff"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

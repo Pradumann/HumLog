@@ -28,6 +28,7 @@ public class HomeActivity extends ActionBarActivity {
     private Intent logInActivityIntent;
     private Intent postAdActivityIntent;
     private Intent EditProfileActivityIntent;
+    private Intent myAdActivityIntent;
     private Spinner citySpinner;
     private Spinner tradesSpinner;
     private TextView firstNameTextView;
@@ -156,10 +157,10 @@ public class HomeActivity extends ActionBarActivity {
                 else if(stringClicked.equalsIgnoreCase("Post Ad")){
                     startPostAdActivity();
                 }
-                else if (stringClicked.equalsIgnoreCase("Ratings")){
-                    // do something
+                else if (stringClicked.equalsIgnoreCase("My Ad's")){
+                    startMYAdActivityIntent();
                 }
-                else{
+                else if(stringClicked.equalsIgnoreCase("My Interests")){
                     // close list
                 }
             }
@@ -193,5 +194,12 @@ public class HomeActivity extends ActionBarActivity {
         EditProfileActivityIntent.putExtra("lastName" , lastName);
         EditProfileActivityIntent.putExtra("controllerObject" , humLogController);
         startActivity(EditProfileActivityIntent);
+    }
+
+    private void startMYAdActivityIntent(){
+        myAdActivityIntent = new Intent(this , MyAdActivity.class);
+        myAdActivityIntent.putExtra("username" , username);
+        myAdActivityIntent.putExtra("controllerObject" , humLogController);
+        startActivity(myAdActivityIntent);
     }
 }
