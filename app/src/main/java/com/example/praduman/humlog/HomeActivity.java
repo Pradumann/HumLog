@@ -25,10 +25,6 @@ import android.widget.TextView;
 public class HomeActivity extends ActionBarActivity {
 
     private HumLogController humLogController;
-    private Intent logInActivityIntent;
-    private Intent postAdActivityIntent;
-    private Intent EditProfileActivityIntent;
-    private Intent myAdActivityIntent;
     private Spinner citySpinner;
     private Spinner tradesSpinner;
     private TextView firstNameTextView;
@@ -93,7 +89,7 @@ public class HomeActivity extends ActionBarActivity {
      * navigation slider of the home page.
      */
     private void createTradesmanNavList(){
-        String [] navMenu = {"" , "Home"  ,"Edit Profile" , "Edit Trades" , "Ratings" , "Log Out"};
+        String [] navMenu = {"" , "My Interests"  ,"My Ratings" , "My Trade Details" , "Edit Profile" , "Log Out"};
         ArrayAdapter<String> navAdapter = new ArrayAdapter<String>(this, R.layout.nav_list_view, navMenu);
         ListView navList = (ListView)findViewById(R.id.navList);
         navList.setAdapter(navAdapter);
@@ -123,9 +119,9 @@ public class HomeActivity extends ActionBarActivity {
                     humLogController.logOut();
                     startLogInActivity();
                 } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
-                    // do something
-                } else if (stringClicked.equalsIgnoreCase("Edit Trades")) {
-                    // do something
+                    startEditProfileActivity();
+                } else if (stringClicked.equalsIgnoreCase("My Trade Details")) {
+                    startTradeProfileActivity();
                 } else if (stringClicked.equalsIgnoreCase("Ratings")) {
                     // do something
                 } else {
@@ -172,7 +168,7 @@ public class HomeActivity extends ActionBarActivity {
      * This method will start the log In activity.
      */
     private void startLogInActivity(){
-        logInActivityIntent = new Intent(this , LogInActivity.class);
+        Intent logInActivityIntent = new Intent(this , LogInActivity.class);
         logInActivityIntent.putExtra("controllerObject" , humLogController);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         logInActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -180,14 +176,14 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void startPostAdActivity(){
-        postAdActivityIntent = new Intent(this, PostAdActivity.class);
+        Intent postAdActivityIntent = new Intent(this, PostAdActivity.class);
         postAdActivityIntent.putExtra("username", username);
         postAdActivityIntent.putExtra("controllerObject", humLogController);
         startActivity(postAdActivityIntent);
     }
 
     private void startEditProfileActivity(){
-        EditProfileActivityIntent = new Intent(this , EditProfileActivity.class);
+        Intent EditProfileActivityIntent = new Intent(this , EditProfileActivity.class);
         EditProfileActivityIntent.putExtra("username" , username);
         EditProfileActivityIntent.putExtra("userType" , userType);
         EditProfileActivityIntent.putExtra("firstName" , firstName);
@@ -197,9 +193,19 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void startMYAdActivityIntent(){
-        myAdActivityIntent = new Intent(this , MyAdActivity.class);
+        Intent myAdActivityIntent = new Intent(this , MyAdActivity.class);
         myAdActivityIntent.putExtra("username" , username);
         myAdActivityIntent.putExtra("controllerObject" , humLogController);
         startActivity(myAdActivityIntent);
+    }
+
+    /******* do some methods before proceeding to tradesman methods */
+
+    private void startTradeProfileActivity(){
+
+        Intent tradeProfileActivityIntent = new Intent(this , TradeProfileActivity.class);
+        tradeProfileActivityIntent.putExtra("username", username);
+        tradeProfileActivityIntent.putExtra("controllerObject", humLogController);
+        startActivity(tradeProfileActivityIntent);
     }
 }

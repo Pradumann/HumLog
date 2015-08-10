@@ -44,6 +44,7 @@
         <item>item two</item>
     </string-array>
     <string name="title_activity_launcher">LauncherActivity</string>
+
     <string name="title_activity_post_ad">PostAdActivity</string>
     <string name = "post_ad_activity_select_trade_title">Select one trade and city for the advertisement</string>
     <string name="post_ad_multiline_text_view">Write some details about your ad in less than 120 characters</string>
@@ -59,4 +60,10 @@
     <string name="my_ad_row_delete_ad_button_text">Delete Ad</string>
     <string name="my_ad_row_trade_text">Trade :</string>
     <string name="my_ad_row_city_text">City :</string>
+
+    <string name="title_activity_trade_profile">TradeProfileActivity</string>
+    <string name = "trade_profile_activity_select_trade_title">Select one trade and city to choose for work</string>
+    <string name="trade_profile_multiline_text_view">Write some details about yourself less than 120 characters</string>
+    <string name="trade_profile_multiline_text_view_hint">Write your details</string>
+    <string name="trade_profile_save_data_button_text">Save</string>
 </resources>

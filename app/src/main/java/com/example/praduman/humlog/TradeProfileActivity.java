@@ -1,10 +1,11 @@
 package com.example.praduman.humlog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,18 +14,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
-public class PostAdActivity extends Activity {
+public class TradeProfileActivity extends ActionBarActivity {
 
-    private Spinner tradesSpinner;
-    private Spinner citySpinner;
     private HumLogController humLogController;
     private String username;
-    private EditText adDetailEditText;
-    private Button postAdButton;
+    private Spinner tradeSpinner;
+    private Spinner citySpinner;
+    private EditText aboutEditText;
+    private Button saveButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_ad);
+        setContentView(R.layout.activity_trade_profile);
         setWindow();
         setSpinners();
         setEditText();
@@ -43,54 +45,42 @@ public class PostAdActivity extends Activity {
     }
 
     private void setSpinners(){
-        tradesSpinner = (Spinner) findViewById(R.id.postadSelectTradeSpinner);
+        tradeSpinner = (Spinner) findViewById(R.id.tradeProfileSelectTradeSpinner);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this , R.array.trades, android.R.layout.simple_list_item_1);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        tradesSpinner.setAdapter(arrayAdapter);
+        tradeSpinner.setAdapter(arrayAdapter);
 
-        citySpinner = (Spinner) findViewById(R.id.postadSelectCitySpinner);
+        citySpinner = (Spinner) findViewById(R.id.tradeProfileSelectCitySpinner);
         ArrayAdapter<CharSequence> arrayAdapter2 = ArrayAdapter.createFromResource(this , R.array.cities, android.R.layout.simple_list_item_1);
         arrayAdapter2.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         citySpinner.setAdapter(arrayAdapter2);
     }
 
     private void setEditText(){
-        adDetailEditText = (EditText) findViewById(R.id.postadMultilineTextView);
+        aboutEditText = (EditText) findViewById(R.id.tradeProfiledMultilineTextView);
     }
 
     private void setButtonAction(){
-        postAdButton = (Button) findViewById(R.id.postadPostAdButton);
-        postAdButton.setOnClickListener(new View.OnClickListener() {
+        saveButton = (Button) findViewById(R.id.tradeProfileSaveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String trade = tradesSpinner.getSelectedItem().toString();
+                String trade = tradeSpinner.getSelectedItem().toString();
                 String city = citySpinner.getSelectedItem().toString();
-                String details = adDetailEditText.getText().toString();
+                String details = aboutEditText.getText().toString();
                 if(trade.equalsIgnoreCase("Select Trade")|| city.equalsIgnoreCase("Select city")){
-                    AlertDialog.Builder errorBuilder = new AlertDialog.Builder(PostAdActivity.this);
-                    errorBuilder.setMessage("Select both trade and city")
-                            .setTitle("Error").setPositiveButton("OK" , null);
-                    AlertDialog dialog = errorBuilder.create();
-                    dialog.show();
+                    showError("Select both trade and city");
                 }
                 else{
                     if(details.trim().length() == 0){
-                        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(PostAdActivity.this);
-                        errorBuilder.setMessage("Please write something about ad")
-                                .setTitle("Error").setPositiveButton("OK" , null);
-                        AlertDialog dialog = errorBuilder.create();
-                        dialog.show();
+                       showError("Please write something about ad");
                     }else{
-                        String message = postAdvertisement(username , trade , city , details);
+                        String message = makeTradeProfile(username, trade, city, details);
                         if(message.equalsIgnoreCase("success")){
-                            Toast.makeText(PostAdActivity.this , "Your ad has been posted" , Toast.LENGTH_LONG).show();
+                            Toast.makeText(TradeProfileActivity.this, "Your profile has been posted", Toast.LENGTH_LONG).show();
                             startHomeActivity();
                         }else{
-                            AlertDialog.Builder errorBuilder = new AlertDialog.Builder(PostAdActivity.this);
-                            errorBuilder.setMessage(message)
-                                    .setTitle("Error").setPositiveButton("OK", null);
-                            AlertDialog dialog = errorBuilder.create();
-                            dialog.show();
+                            showError(message);
                         }
                     }
                 }
@@ -98,8 +88,8 @@ public class PostAdActivity extends Activity {
         });
     }
 
-    private String postAdvertisement(String username , String trade , String city ,String details){
-        String message = humLogController.postAd(username, trade, city , details);
+    private String makeTradeProfile(String username , String trade , String city ,String about){
+        String message = humLogController.makeTradeProfile(username, trade, city , about);
         if(message.equalsIgnoreCase("success")){
             return "success";
         }else {
@@ -108,5 +98,14 @@ public class PostAdActivity extends Activity {
     }
     private void startHomeActivity(){
         this.finish();
+    }
+
+    private void showError(String message){
+
+        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(TradeProfileActivity.this);
+        errorBuilder.setMessage(message)
+                .setTitle("Error").setPositiveButton("OK", null);
+        AlertDialog dialog = errorBuilder.create();
+        dialog.show();
     }
 }

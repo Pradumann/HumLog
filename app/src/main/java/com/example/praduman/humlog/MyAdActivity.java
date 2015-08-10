@@ -10,10 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MyAdActivity extends ActionBarActivity {
@@ -21,12 +24,13 @@ public class MyAdActivity extends ActionBarActivity {
     private String username;
     private HumLogController humLogController;
     private ListView myAdListView;
-    private ArrayList<String> tradeList;
-    private ArrayList<String> cityList;
-    private ArrayList<String> adList;
+    private List<String> tradeList;
+    private List<String> cityList;
+    private List<String> adList;
     private String [] trade;
     private String [] city;
     private String [] ad;
+    private String [] button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,7 @@ public class MyAdActivity extends ActionBarActivity {
         username = getIntent().getStringExtra("username");
         myAdListView = (ListView) findViewById(R.id.myAdsListView);
         setAdRowData();
-        myAdListView.setAdapter(new myAdAdapter(this,trade ,city  ,ad ) );
+        myAdListView.setAdapter(new myAdAdapter(this,trade ,city  ,ad , button ) );
     }
 
     private void setWindow(){
@@ -49,12 +53,19 @@ public class MyAdActivity extends ActionBarActivity {
     }
 
     private void setAdRowData(){
-        // do something with controller
 
+        tradeList = humLogController.getTradeList(username);
+        cityList = humLogController.getCityList(username);
+        adList = humLogController.getAdList(username);
 
         trade=tradeList.toArray(new String[tradeList.size()]);
         city= cityList.toArray(new String[cityList.size()]);
         ad=adList.toArray(new String[adList.size()]);
+        button = new String[tradeList.size()];
+        for(int i =0; i<tradeList.size(); i++){
+            int position = i+1;
+            button[i] = "Delete Ad " + position;
+        }
     }
 
 
@@ -66,11 +77,13 @@ public class MyAdActivity extends ActionBarActivity {
         String trade;
         String city;
         String ad;
+        String button;
 
-        public myAdRow(String trade , String city , String ad){
+        public myAdRow(String trade , String city , String ad , String button){
             this.trade = trade;
             this.city = city;
             this.ad = ad;
+            this.button = button;
         }
     }
 
@@ -80,11 +93,11 @@ public class MyAdActivity extends ActionBarActivity {
         ArrayList<myAdRow> list;
         Context context;
 
-        public myAdAdapter(Context context ,String [] trade , String [] city , String [] ad){
+        public myAdAdapter(Context context ,String [] trade , String [] city , String [] ad , String [] button){
             this.context = context;
             list = new ArrayList<myAdRow>();
             for(int i =0; i< trade.length; i++){
-                list.add(new myAdRow(trade[i] , city[i] , ad[i]));
+                list.add(new myAdRow(trade[i] , city[i] , ad[i] , button[i]));
             }
         }
 
@@ -105,7 +118,7 @@ public class MyAdActivity extends ActionBarActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View adRow = inflater.inflate(R.layout.my_ad_row_view , parent , false);
@@ -113,13 +126,26 @@ public class MyAdActivity extends ActionBarActivity {
             TextView myAdTrade = (TextView) adRow.findViewById(R.id.myAdRowTrade);
             TextView myAdCity = (TextView) adRow.findViewById(R.id.myAdRowCity);
             TextView myAdRowAdText = (TextView) adRow.findViewById(R.id.myAdRowAdText);
+            Button deleteButton = (Button) adRow.findViewById(R.id.myAdRowDeleteAdButton);
 
             myAdRow temp = list.get(position);
             myAdTrade.setText(temp.trade);
             myAdCity.setText(temp.city);
             myAdRowAdText.setText(temp.ad);
-
+            deleteButton.setText(temp.button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDeleteButtonActionListener(position);
+                }
+            });
             return adRow;
         }
+    }
+
+    private void setDeleteButtonActionListener(int position){
+        humLogController.deleteAdvertisement(username , position);
+        Toast.makeText(this , "Advertisement "+ position+1 + "has been deleted" , Toast.LENGTH_LONG).show();
+        this.finish();
     }
 }

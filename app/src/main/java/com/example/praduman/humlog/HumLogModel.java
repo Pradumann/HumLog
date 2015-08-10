@@ -15,6 +15,8 @@ import com.parse.LogInCallback;
 import com.parse.LogInCallback;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -26,12 +28,14 @@ public class HumLogModel extends Application{
     private   ParseObject tradesman;
     private   ParseObject user;
     private   ParseObject advertisement;
+    private   ParseObject tradeProfile;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
         tradesman = new ParseObject("Tradesman");
         user = new ParseObject("User");
         advertisement = new ParseObject("Advertisement");
+        tradeProfile = new ParseObject("TradeProfile");
     }
 
     public void createNewUser(String username, String password , String userType){
@@ -93,6 +97,23 @@ public class HumLogModel extends Application{
             advertisement.put("City" , city);
             advertisement.put("Ad" , ad);
             advertisement.saveInBackground();
+            return "success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
+    public String makeTradeProfile(String username , String trade , String city , String about ){
+
+        try{
+            tradeProfile.put("Username" , username);
+            tradeProfile.put("Trade" , trade);
+            tradeProfile.put("City" , city);
+            tradeProfile.put("About" , about);
+            tradeProfile.put("Score" , 50);
+            tradeProfile.put("Ratings" , 0);
+            tradeProfile.put("Jobs" , 0);
+            tradeProfile.saveInBackground();
             return "success";
         }catch (Exception e){
             return e.getMessage();
@@ -432,12 +453,107 @@ public class HumLogModel extends Application{
             object.saveInBackground();
 
             ParseQuery<ParseUser> userQuery = ParseQuery.getQuery("_User");
-            userQuery.whereEqualTo("username" , username);
+            userQuery.whereEqualTo("username", username);
             ParseUser user = userQuery.getFirst();
             user.put("password" , password);
             user.saveInBackground();
             return "success";
 
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
+    public List<String> getTradeList(String username){
+        List<String> tradeList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("Username", username);
+            List<ParseObject> objectList = query.find();
+
+            for(int i =0; i<objectList.size(); i++){
+
+                tradeList.add(i , objectList.get(i).getString("Trade"));
+            }
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in getting trade list from advertisement");
+        }
+        return tradeList;
+    }
+
+    public List<String> getCityList(String username){
+        List<String> cityList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("Username", username);
+            List<ParseObject> objectList = query.find();
+
+            for(int i =0; i<objectList.size(); i++){
+
+                cityList.add(i , objectList.get(i).getString("City"));
+            }
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in getting city list from advertisement");
+        }
+        return cityList;
+    }
+
+    public List<String> getAdList(String username){
+        List<String> adList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("Username", username);
+            List<ParseObject> objectList = query.find();
+
+            for(int i =0; i<objectList.size(); i++){
+
+                adList.add(i , objectList.get(i).getString("Ad"));
+            }
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in getting ad list from advertisement");
+        }
+        return adList;
+    }
+
+    public void deleteAdvertisement(String username , int position){
+
+        List<String> adList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("Username", username);
+            List<ParseObject> objectList = query.find();
+            ParseObject object = objectList.get(position);
+            object.delete();
+            object.saveInBackground();
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in deleting from advertisement");
+        }
+    }
+
+    public boolean checkProfiles(String username){
+
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public String updateTradeProfile(String username , String trade , String city , String about){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            object.put("Trade", trade);
+            object.put("City", city);
+            object.put("About", about);
+            object.saveInBackground();
+            return "success";
         }catch (Exception e){
             return e.getMessage();
         }

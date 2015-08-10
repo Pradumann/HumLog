@@ -4,6 +4,8 @@ import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Praduman on 23/07/2015.
@@ -163,6 +165,34 @@ public class HumLogController implements Serializable {
             }
         }
 
+    }
+
+    public List<String> getTradeList(String username){
+
+        return humLogModel.getTradeList(username);
+    }
+
+    public List<String> getCityList(String username){
+
+        return humLogModel.getCityList(username);
+    }
+
+    public List<String> getAdList(String username){
+
+        return humLogModel.getAdList(username);
+    }
+
+    public void deleteAdvertisement(String username , int position){
+        humLogModel.deleteAdvertisement(username , position);
+    }
+
+
+    public String makeTradeProfile(String username , String trade ,String city , String about){
+        if(humLogModel.checkProfiles(username)){
+            return humLogModel.updateTradeProfile(username , trade , city , about);
+        }else {
+            return humLogModel.makeTradeProfile(username, trade, city, about);
+        }
     }
 
     /**
