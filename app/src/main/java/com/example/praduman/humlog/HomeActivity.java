@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class HomeActivity extends ActionBarActivity {
     private String userType;
     private String firstName;
     private String lastName;
+    private Button searchButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ public class HomeActivity extends ActionBarActivity {
         setSpinners();
         setFirstNameText();
         setNavigationList();
+        setButtonAction();
     }
 
     private void setDetails(){
@@ -77,11 +80,9 @@ public class HomeActivity extends ActionBarActivity {
     private void setNavigationList(){
         if(userType.equalsIgnoreCase("customer")){
             createCustomerNavList();
-        }else{
+        }else {
             createTradesmanNavList();
         }
-
-
     }
 
     /**
@@ -122,10 +123,10 @@ public class HomeActivity extends ActionBarActivity {
                     startEditProfileActivity();
                 } else if (stringClicked.equalsIgnoreCase("My Trade Details")) {
                     startTradeProfileActivity();
-                } else if (stringClicked.equalsIgnoreCase("Ratings")) {
-                    // do something
-                } else {
-                    // close list
+                } else if (stringClicked.equalsIgnoreCase("My Ratings")) {
+                    startMyRatingActivity();
+                } else if (stringClicked.equalsIgnoreCase("My Interests")) {
+                    startMyInterestActivityForTradesman();
                 }
             }
         });
@@ -143,24 +144,36 @@ public class HomeActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 TextView textView = (TextView) viewClicked;
                 String stringClicked = textView.getText().toString();
-                if(stringClicked.equalsIgnoreCase("Log Out")){
+                if (stringClicked.equalsIgnoreCase("Log Out")) {
                     humLogController.logOut();
                     startLogInActivity();
-                }
-                else if (stringClicked.equalsIgnoreCase("Edit Profile")){
+                } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
                     startEditProfileActivity();
-                }
-                else if(stringClicked.equalsIgnoreCase("Post Ad")){
+                } else if (stringClicked.equalsIgnoreCase("Post Ad")) {
                     startPostAdActivity();
-                }
-                else if (stringClicked.equalsIgnoreCase("My Ad's")){
-                    startMYAdActivityIntent();
-                }
-                else if(stringClicked.equalsIgnoreCase("My Interests")){
-                    // close list
+                } else if (stringClicked.equalsIgnoreCase("My Ad's")) {
+                    startMYAdActivity();
+                } else if (stringClicked.equalsIgnoreCase("My Interests")) {
+                    startMyInterestActivityForCustomer();
                 }
             }
         });
+    }
+
+    private void setButtonAction(){
+        searchButton = (Button) findViewById(R.id.selectionbarHomeSearchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(userType.equalsIgnoreCase("customer")){
+                    // search in the trade profiles
+                }else {
+                    // search in advertisement
+                }
+            }
+        });
+
     }
 
 
@@ -187,19 +200,21 @@ public class HomeActivity extends ActionBarActivity {
         EditProfileActivityIntent.putExtra("username" , username);
         EditProfileActivityIntent.putExtra("userType" , userType);
         EditProfileActivityIntent.putExtra("firstName" , firstName);
-        EditProfileActivityIntent.putExtra("lastName" , lastName);
-        EditProfileActivityIntent.putExtra("controllerObject" , humLogController);
+        EditProfileActivityIntent.putExtra("lastName", lastName);
+        EditProfileActivityIntent.putExtra("controllerObject", humLogController);
         startActivity(EditProfileActivityIntent);
     }
 
-    private void startMYAdActivityIntent(){
+    private void startMYAdActivity(){
         Intent myAdActivityIntent = new Intent(this , MyAdActivity.class);
         myAdActivityIntent.putExtra("username" , username);
         myAdActivityIntent.putExtra("controllerObject" , humLogController);
         startActivity(myAdActivityIntent);
     }
 
-    /******* do some methods before proceeding to tradesman methods */
+    private void startMyInterestActivityForCustomer(){
+
+    }
 
     private void startTradeProfileActivity(){
 
@@ -207,5 +222,17 @@ public class HomeActivity extends ActionBarActivity {
         tradeProfileActivityIntent.putExtra("username", username);
         tradeProfileActivityIntent.putExtra("controllerObject", humLogController);
         startActivity(tradeProfileActivityIntent);
+    }
+
+    private void startMyRatingActivity(){
+        Intent myRatingActivityIntent = new Intent(this , MyRatingActivity.class);
+        myRatingActivityIntent.putExtra("username" , username);
+        myRatingActivityIntent.putExtra("controllerObject" , humLogController);
+        startActivity(myRatingActivityIntent);
+    }
+
+    private void startMyInterestActivityForTradesman(){
+
+
     }
 }

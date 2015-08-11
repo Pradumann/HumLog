@@ -95,6 +95,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.praduman.humlog.HomeActivity" />
         </activity>
+        <activity
+            android:name=".MyRatingActivity"
+            android:label="@string/title_activity_my_rating"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.praduman.humlog.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

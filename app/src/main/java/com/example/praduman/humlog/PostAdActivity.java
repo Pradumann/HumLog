@@ -25,7 +25,7 @@ public class PostAdActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_ad);
-        setWindow();
+    //    setWindow();
         setSpinners();
         setEditText();
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");

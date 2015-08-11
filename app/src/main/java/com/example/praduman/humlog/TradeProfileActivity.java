@@ -27,12 +27,12 @@ public class TradeProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade_profile);
-        setWindow();
+     //   setWindow();
         setSpinners();
-        setEditText();
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
         humLogController.setModelObject();
         username = getIntent().getStringExtra("username");
+        setEditText();
         setButtonAction();
     }
 
@@ -58,6 +58,10 @@ public class TradeProfileActivity extends ActionBarActivity {
 
     private void setEditText(){
         aboutEditText = (EditText) findViewById(R.id.tradeProfiledMultilineTextView);
+
+        if(humLogController.checkTradeProfile(username)){
+            aboutEditText.setText(humLogController.getAboutText(username));
+        }
     }
 
     private void setButtonAction(){

@@ -543,6 +543,18 @@ public class HumLogModel extends Application{
         }
     }
 
+    public String getAboutText(String username){
+       try {
+           ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+           query.whereEqualTo("Username", username);
+           ParseObject object = query.getFirst();
+           return object.getString("About");
+       }catch (Exception e){
+            Log.d("HumLogModel" , "There is some problem in returning about data of tradesman ");
+           return e.getMessage();
+       }
+
+    }
     public String updateTradeProfile(String username , String trade , String city , String about){
 
         try {
@@ -554,6 +566,41 @@ public class HumLogModel extends Application{
             object.put("About", about);
             object.saveInBackground();
             return "success";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
+    public String getRatings(String username){
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            return object.getInt("Ratings")+"";
+        }catch (Exception e){
+           return e.getMessage();
+        }
+    }
+
+    public String getJobsDone(String username){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            return object.getInt("Jobs")+"";
+        }catch (Exception e){
+            return e.getMessage();
+        }
+    }
+
+    public String getScore(String username){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            return object.getInt("Score")+"";
         }catch (Exception e){
             return e.getMessage();
         }

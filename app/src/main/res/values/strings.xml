@@ -66,4 +66,11 @@
     <string name="trade_profile_multiline_text_view">Write some details about yourself less than 120 characters</string>
     <string name="trade_profile_multiline_text_view_hint">Write your details</string>
     <string name="trade_profile_save_data_button_text">Save</string>
+
+    <string name="title_activity_my_rating">MyRatingActivity</string>
+    <string name="my_rating_rating_text">Ratings</string>
+    <string name="my_rating_jobs_done_text">Jobs Done</string>
+    <string name="my_rating_total_score_text">Total Score</string>
+    <string name="my_rating_detail_text">Ask your customers, you worked for to rate you. Good ratings will help to
+        increase your score</string>
 </resources>

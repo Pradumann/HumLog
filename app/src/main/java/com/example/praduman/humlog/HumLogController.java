@@ -22,6 +22,9 @@ public class HumLogController implements Serializable {
     private transient String locality;
     private transient String city;
     private transient String postCode;
+    private transient String score;
+    private transient String jobsDone;
+    private transient String ratings;
     private transient HumLogModel humLogModel;
 
 
@@ -186,13 +189,25 @@ public class HumLogController implements Serializable {
         humLogModel.deleteAdvertisement(username , position);
     }
 
+    public boolean checkTradeProfile(String username){
+        return humLogModel.checkProfiles(username);
+    }
 
+    public String getAboutText(String username){
+        return humLogModel.getAboutText(username);
+    }
     public String makeTradeProfile(String username , String trade ,String city , String about){
         if(humLogModel.checkProfiles(username)){
             return humLogModel.updateTradeProfile(username , trade , city , about);
         }else {
             return humLogModel.makeTradeProfile(username, trade, city, about);
         }
+    }
+
+    public void setProfileRatings(String username){
+       setRatings(humLogModel.getRatings(username));
+       setJobsDone(humLogModel.getJobsDone(username));
+        setScore(humLogModel.getScore(username));
     }
 
     /**
@@ -236,6 +251,18 @@ public class HumLogController implements Serializable {
         this.humLogModel = new HumLogModel();
     }
 
+    public void setScore(String score){
+        this.score = score;
+    }
+
+    public void setJobsDone(String jobsDone){
+        this.jobsDone = jobsDone;
+    }
+
+    public void setRatings(String ratings){
+        this.ratings = ratings;
+    }
+
 
     public String getUsername(){
         return username;
@@ -271,4 +298,18 @@ public class HumLogController implements Serializable {
         return postCode;
     }
 
+    public String getScore(){
+      //  return "score";
+        return score;
+    }
+
+    public String getJobsDone(){
+       // return "some";
+        return jobsDone;
+    }
+
+    public String getRatings(){
+      //  return "test";
+        return ratings;
+    }
 }
