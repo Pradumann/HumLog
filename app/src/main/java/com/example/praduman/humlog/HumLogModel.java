@@ -605,4 +605,45 @@ public class HumLogModel extends Application{
             return e.getMessage();
         }
     }
+
+
+
+    public List<String> getAdvertisementDetailsList(String city , String trade){
+        List<String> detailList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("City", city);
+            query.whereEqualTo("Trade" , trade);
+            List<ParseObject> objectList = query.find();
+
+            for(int i =0; i<objectList.size(); i++){
+
+                detailList.add(i , objectList.get(i).getString("Ad"));
+            }
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in getting ad list from advertisement");
+        }
+        return detailList;
+    }
+
+    public List<String> getAdUsernameList(String city , String trade){
+        List<String> usernameList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("City", city);
+       //     query.whereEqualTo("Trade" , trade);
+            List<ParseObject> objectList = query.find();
+
+            for(int i =0; i<objectList.size(); i++){
+
+                usernameList.add(i , objectList.get(i).getString("Username"));
+            }
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in getting ad list from advertisement");
+        }
+        usernameList.add("fuck you");
+        return usernameList;
+     //   return usernameList;
+    }
+
 }

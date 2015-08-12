@@ -116,7 +116,7 @@ public class HumLogController implements Serializable {
         this.username = username;
         setUserType(humLogModel.getUserType(username));
         setFirstName(humLogModel.getFirstName(username, userType));
-        setLastName(humLogModel.getLastName (username , userType));
+        setLastName(humLogModel.getLastName(username, userType));
     }
 
     public String postAd(String username , String trade ,String city , String ad){
@@ -129,13 +129,13 @@ public class HumLogController implements Serializable {
     }
 
     public void setOldData(String username , String userType){
-        setPassword(humLogModel.getPassword(username ));
-        setHouseNumber(humLogModel.getHouseNumber(username , userType));
-        setMobileNumber(humLogModel.getMobileNumber(username , userType));
+        setPassword(humLogModel.getPassword(username));
+        setHouseNumber(humLogModel.getHouseNumber(username, userType));
+        setMobileNumber(humLogModel.getMobileNumber(username, userType));
         setStreet(humLogModel.getStreet(username , userType));
-        setLocality(humLogModel.getLocality(username , userType));
-        setPostCode(humLogModel.getPostCode(username , userType));
-        setCity(humLogModel.getCity(username , userType));
+        setLocality(humLogModel.getLocality(username, userType));
+        setPostCode(humLogModel.getPostCode(username, userType));
+        setCity(humLogModel.getCity(username, userType));
     }
 
     public String setNewData(){
@@ -208,6 +208,90 @@ public class HumLogController implements Serializable {
        setRatings(humLogModel.getRatings(username));
        setJobsDone(humLogModel.getJobsDone(username));
         setScore(humLogModel.getScore(username));
+    }
+
+    public List<String> getAdSearchResultUsernameList(String city , String trade){
+        return humLogModel.getAdUsernameList(city, trade);
+    }
+
+    public List<String> getAdvertisementFirstNameList(List<String> usernameList ){
+        List<String> firstNameList = new ArrayList<String>();
+
+      /**  for(int i =0; i<usernameList.size(); i++){
+            firstNameList.add(i , humLogModel.getFirstName(usernameList.get(i) , "customer"));
+        }
+
+        return firstNameList;*/
+        firstNameList.add(0, "firstname");
+        return firstNameList;
+    }
+
+    public List<String> getAdvertisementLastNameList(List<String> usernameList ){
+
+        List<String> lastNameList = new ArrayList<String>();
+
+   /**     for(int i =0; i<usernameList.size(); i++){
+            lastNameList.add(i , humLogModel.getLastName(usernameList.get(i), "customer"));
+        }
+
+        return lastNameList;*/
+        lastNameList.add(0, "lastname");
+        return lastNameList;
+    }
+
+    public List<String> getAdvertisementStreetList(List<String> usernameList){
+
+        List<String> streetList = new ArrayList<String>();
+
+    /**    for(int i =0; i<usernameList.size(); i++){
+            streetList.add(i , humLogModel.getStreet(usernameList.get(i), "customer"));
+        }
+
+        return streetList;*/
+        streetList.add(0, "street");
+        return streetList;
+    }
+    public List<String> getAdvertisementLocalityList(List<String> usernameList){
+
+        List<String> localityList = new ArrayList<String>();
+
+   /**     for(int i =0; i<usernameList.size(); i++){
+            localityList.add(i , humLogModel.getLocality(usernameList.get(i), "customer"));
+        }
+
+        return localityList;*/
+        localityList.add(0 , "locality");
+        return localityList;
+    }
+    public List<String> getAdvertisementMobileNumberList(List<String> usernameList ){
+
+        List<String> mobileNumberList = new ArrayList<String>();
+
+  /**      for(int i =0; i<usernameList.size(); i++){
+            mobileNumberList.add(i , humLogModel.getMobileNumber(usernameList.get(i), "customer"));
+        }
+
+        return mobileNumberList;*/
+        mobileNumberList.add(0, "9813172327");
+        return mobileNumberList;
+    }
+    public List<String> getAdvertisementPostCodeList(List<String> usernameList ){
+
+        List<String> postCodeList = new ArrayList<String>();
+
+        /**  for(int i =0; i<usernameList.size(); i++){
+            postCodeList.add(i , humLogModel.getPostCode(usernameList.get(i), "customer"));
+        }
+
+        return postCodeList;*/
+        postCodeList.add(0,"b29 7dl");
+        return postCodeList;
+    }
+    public List<String> getAdvertisementDetailsList( String city , String trade){
+
+     //   return humLogModel.getAdvertisementDetailsList(city , trade);
+        List<String> l = new ArrayList<String>(); l.add(0, " this is advertisement");
+        return l;
     }
 
     /**
@@ -299,17 +383,14 @@ public class HumLogController implements Serializable {
     }
 
     public String getScore(){
-      //  return "score";
         return score;
     }
 
     public String getJobsDone(){
-       // return "some";
         return jobsDone;
     }
 
     public String getRatings(){
-      //  return "test";
         return ratings;
     }
 }

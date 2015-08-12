@@ -10,17 +10,24 @@
 package com.example.praduman.humlog;
 
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -33,7 +40,26 @@ public class HomeActivity extends ActionBarActivity {
     private String userType;
     private String firstName;
     private String lastName;
+    private ListView searchList;
     private Button searchButton;
+    private String [] searchResultFirstName;
+    private String [] searchResultLastName;
+    private String [] searchResultStreet;
+    private String [] searchResultLocality;
+    private String [] searchResultMobileNumber;
+    private String [] searchResultPostCode;
+    private String [] searchResultDetails;
+    private String [] interestButton;
+    private List<String> searchResultFirstNameList;
+    private List<String> searchResultLastNameList;
+    private List<String> searchResultStreetList;
+    private List<String> searchResultLocalityList;
+    private List<String> searchResultMobileNumberList;
+    private List<String> searchResultPostCodeList;
+    private List<String> searchResultDetailsList;
+    private List<String> interestButtonList;
+    private String citySelected;
+    private String tradeSelected;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,15 +187,18 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void setButtonAction(){
+        citySelected = citySpinner.getSelectedItem().toString();
+        tradeSelected= tradesSpinner.getSelectedItem().toString();
+        searchList = (ListView) findViewById(R.id.searchResultRelativeLayout);
         searchButton = (Button) findViewById(R.id.selectionbarHomeSearchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(userType.equalsIgnoreCase("customer")){
-                    // search in the trade profiles
-                }else {
-                    // search in advertisement
+                if (userType.equalsIgnoreCase("customer")) {
+                    searchTradeProfiles();
+                } else {
+                    searchAdvertisement();
                 }
             }
         });
@@ -216,6 +245,36 @@ public class HomeActivity extends ActionBarActivity {
 
     }
 
+
+    private void searchAdvertisement(){
+        List<String> usernameList = new ArrayList<String>();
+        usernameList = humLogController.getAdSearchResultUsernameList(citySelected, tradeSelected);
+        String [] u = usernameList.toArray(new String[usernameList.size()]);
+
+        searchResultFirstNameList = humLogController.getAdvertisementFirstNameList(usernameList);
+        searchResultLastNameList = humLogController.getAdvertisementLastNameList(usernameList);
+        searchResultStreetList = humLogController.getAdvertisementStreetList(usernameList);
+        searchResultLocalityList = humLogController.getAdvertisementLocalityList(usernameList);
+        searchResultMobileNumberList = humLogController.getAdvertisementMobileNumberList(usernameList);
+        searchResultPostCodeList = humLogController.getAdvertisementPostCodeList(usernameList);
+        searchResultDetailsList = humLogController.getAdvertisementDetailsList(citySelected, tradeSelected);
+
+        searchResultFirstName = searchResultFirstNameList.toArray(new String[searchResultFirstNameList.size()]);
+        searchResultLastName = searchResultLastNameList.toArray(new String[searchResultLastNameList.size()]);
+        searchResultStreet = searchResultStreetList.toArray(new String[searchResultStreetList.size()]);
+        searchResultLocality = searchResultLocalityList.toArray(new String[searchResultLocalityList.size()]);
+        searchResultMobileNumber =searchResultMobileNumberList.toArray(new String[searchResultMobileNumberList.size()]);
+        searchResultPostCode = searchResultPostCodeList.toArray(new String[searchResultPostCodeList.size()]);
+        searchResultDetails = searchResultDetailsList.toArray(new String[searchResultDetailsList.size()]);
+        interestButton = new String[searchResultFirstNameList.size()];
+        for(int i =0; i<searchResultFirstNameList.size(); i++){
+            interestButton[i] = "Interested";
+        }
+
+        searchList.setAdapter(new myAdAdapter(this , u , searchResultLastName , searchResultStreet
+        , searchResultLocality , searchResultMobileNumber , searchResultPostCode , searchResultDetails , interestButton));
+    }
+
     private void startTradeProfileActivity(){
 
         Intent tradeProfileActivityIntent = new Intent(this , TradeProfileActivity.class);
@@ -234,5 +293,100 @@ public class HomeActivity extends ActionBarActivity {
     private void startMyInterestActivityForTradesman(){
 
 
+    }
+
+    private void searchTradeProfiles(){
+
+    }
+
+
+
+    /**
+     * The codes for two inner classes (myAdRow and myAdAdapter) below are taken from a you tube video,
+     * having the link https://www.youtube.com/watch?v=_l9e2t4fcfM .
+     */
+    class myAdRow{
+        String firstName;
+        String lastName;
+        String street;
+        String locality;
+        String mobileNumber;
+        String postCode;
+        String details;
+        String button;
+
+        public myAdRow(String firstName , String lastName , String street , String locality , String mobileNumber
+        , String postCode , String details , String button){
+
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.street = street;
+            this.locality = locality;
+            this.mobileNumber = mobileNumber;
+            this.postCode = postCode;
+            this.details = details;
+            this.button = button;
+        }
+    }
+
+
+    class myAdAdapter extends BaseAdapter {
+
+        ArrayList<myAdRow> list;
+        Context context;
+
+        public myAdAdapter(Context context ,String [] firstName , String [] lastName , String [] street , String [] locality
+        , String [] mobileNumber , String [] postCode , String [] details , String[] button){
+            this.context = context;
+            list = new ArrayList<myAdRow>();
+            for(int i =0; i< firstName.length; i++){
+                list.add(new myAdRow(firstName[i] , lastName[i] , street[i] , locality[i] , mobileNumber[i],
+                        postCode[i] , details[i] , button[i]));
+            }
+        }
+
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View searchResultRow = inflater.inflate(R.layout.my_search_result_row , parent , false);
+
+            TextView mySearchResultRowFirstName = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowFirstNameText);
+            TextView mySearchResultRowLastName = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowLastNameText);
+            TextView mySearchResultRowStreet = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowStreetText);
+            TextView mySearchResultRowLocality = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowLocalityText);
+            TextView mySearchResultRowMobileNumber = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowNumberText);
+            TextView mySearchResultRowPostCode = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowPostCodeText);
+            TextView mySearchResultRowDetails = (TextView) searchResultRow.findViewById(R.id.mySearchResultDetailText);
+            Button interestedButton = (Button) searchResultRow.findViewById(R.id.mySearchResultInterestedButton);
+
+
+            myAdRow temp = list.get(position);
+            mySearchResultRowFirstName.setText(temp.firstName);
+            mySearchResultRowLastName.setText(temp.lastName);
+            mySearchResultRowStreet.setText(temp.street);
+            mySearchResultRowLocality.setText(temp.locality);
+            mySearchResultRowMobileNumber.setText(temp.mobileNumber);
+            mySearchResultRowPostCode.setText(temp.postCode);
+            mySearchResultRowDetails.setText(temp.details);
+            interestedButton.setText(temp.button);
+            return searchResultRow;
+        }
     }
 }
