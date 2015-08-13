@@ -56,7 +56,7 @@ public class HumLogController implements Serializable {
                 return passwordMessage;
             }
         }
-        else if (userMessage.equalsIgnoreCase("incorrect")){
+        else if (userMessage.equalsIgnoreCase("no results found for query")){
             return "User do not exist";
         }
         else {
@@ -188,7 +188,7 @@ public class HumLogController implements Serializable {
     }
 
     public void deleteAdvertisement(String username , int position){
-        humLogModel.deleteAdvertisement(username , position);
+        humLogModel.deleteAdvertisement(username, position);
     }
 
     public boolean checkTradeProfile(String username){
@@ -281,7 +281,79 @@ public class HumLogController implements Serializable {
 
     public List<String> getAdvertisementDetailsList( String city , String trade){
 
-        return humLogModel.getAdvertisementDetailsList(city , trade);
+        return humLogModel.getAdvertisementDetailsList(city, trade);
+    }
+/*************Here start the methods of trade lists***/
+    public List<String> getTradeUsernameList(String city , String trade){
+        return humLogModel.getTradeUsernameList(city , trade);
+    }
+
+    public List<String> getTradeFirstNameList(List<String> usernameList ){
+        List<String> firstNameList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            firstNameList.add(i , humLogModel.getFirstName(usernameList.get(i), "tradesman"));
+        }
+        return firstNameList;
+    }
+
+    public List<String> getTradeLastNameList(List<String> usernameList ){
+
+        List<String> lastNameList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            lastNameList.add(i , humLogModel.getLastName(usernameList.get(i), "tradesman"));
+        }
+
+        return lastNameList;
+    }
+
+    public List<String> getTradeStreetList(List<String> usernameList){
+
+        List<String> streetList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            streetList.add(i , humLogModel.getStreet(usernameList.get(i), "tradesman"));
+        }
+
+        return streetList;
+    }
+    public List<String> getTradeLocalityList(List<String> usernameList){
+
+        List<String> localityList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            localityList.add(i , humLogModel.getLocality(usernameList.get(i), "tradesman"));
+        }
+
+        return localityList;
+    }
+
+    public List<String> getTradeMobileNumberList(List<String> usernameList ){
+
+        List<String> mobileNumberList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            mobileNumberList.add(i , humLogModel.getMobileNumber(usernameList.get(i), "tradesman"));
+        }
+
+        return mobileNumberList;
+    }
+
+    public List<String> getTradePostCodeList(List<String> usernameList ){
+
+        List<String> postCodeList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            postCodeList.add(i , humLogModel.getPostCode(usernameList.get(i), "tradesman"));
+        }
+
+        return postCodeList;
+    }
+
+    public List<String> getTradeDetailsList( String city , String trade){
+
+        return humLogModel.getTradeDetailsList(city, trade);
     }
 
     /**

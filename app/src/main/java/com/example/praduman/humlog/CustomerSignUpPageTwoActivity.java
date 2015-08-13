@@ -162,22 +162,21 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
      * @return boolean (whether string have only characetrs)
      */
     private boolean checkString(String string){
-        char[] chars = string.toCharArray();
+        Pattern pattern = Pattern.compile("[a-zA-Z\\s]+");
+        Matcher match = pattern.matcher(string);
 
-        for (char c : chars) {
-            if(!Character.isLetter(c)) {
-                return false;
-            }
+        if(match.matches()){
+            return true;
+        }else {
+            return false;
         }
-
-        return true;
     }
 
     /**
      * This method will check if
      * any of the city is selected or not.
      * @param city
-     * @return bookean (city selected or not)
+     * @return boolean (city selected or not)
      */
     public boolean checkCity(String city){
        return city.equalsIgnoreCase("Select city");
@@ -221,6 +220,12 @@ public class CustomerSignUpPageTwoActivity extends ActionBarActivity {
         startActivity(homeActivityIntent);
     }
 
+    /**
+     * This method show the dialogue box with a message given.
+     * The code is taken from stackoverflow with following link
+     * http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+     * @param message
+     */
     private void showError(String message){
         AlertDialog.Builder errorBuilder = new AlertDialog.Builder(CustomerSignUpPageTwoActivity.this);
         errorBuilder.setMessage(message)

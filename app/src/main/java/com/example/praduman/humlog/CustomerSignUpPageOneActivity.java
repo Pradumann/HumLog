@@ -44,6 +44,7 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_sign_up_page_one);
         humLogController = (HumLogController) getIntent().getSerializableExtra("controllerObject");
+        humLogController.setModelObject();
         setEditTexts();
         setIntentAndButton();
     }
@@ -85,14 +86,16 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
                         if (checkString(lastName)) {
 
                             if (checkEmail(eMail)) {
-
-                                if (checkPassowrd(password, repeatPassword)) {
-                                    updateIntent();
-                                    startActivity(customerSignUpPageTwoIntent);
+                                if (checkUser(eMail)) {
+                                    if (checkPassowrd(password, repeatPassword)) {
+                                        updateIntent();
+                                        startActivity(customerSignUpPageTwoIntent);
+                                    } else {
+                                        showError("Passwords do not match");
+                                    }
                                 } else {
-                                    showError("Passwords do not match");
+                                    showError("Username already exist");
                                 }
-
                             } else {
                                 showError("Invalid Email. Fill Email properly");
                             }
@@ -121,8 +124,8 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         firstName = firstNameEditText.getText().toString();
         lastName = lastNameEditText.getText().toString();
         eMail = eMailEditText.getText().toString();
-        password = passwordEditText.getText().toString();
-        repeatPassword = repeatPasswordEditText.getText().toString();
+        password = passwordEditText.getText().toString().toLowerCase();
+        repeatPassword = repeatPasswordEditText.getText().toString().toLowerCase();
         userType = "customer";
 
         if(firstName.trim().length()==0 || lastName.trim().length() ==0|| eMail.trim().length()==0
@@ -141,15 +144,15 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
      * @return boolean (whether string have characters)
      */
     public boolean checkString(String string){
-            char[] chars = string.toCharArray();
 
-            for (char c : chars) {
-                if(!Character.isLetter(c)) {
-                    return false;
-                }
-            }
+        Pattern pattern = Pattern.compile("[a-zA-Z\\s]+");
+        Matcher match = pattern.matcher(string);
 
+        if(match.matches()){
             return true;
+        }else {
+            return false;
+        }
     }
 
     /**
@@ -166,6 +169,21 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         }
         else {
             return false;
+        }
+    }
+
+    /**
+     * This method will check if the user with same username already exist or not.
+     * If the user exist it will return false and if user do not exist it will return true, so that the statement
+     * calling this method can proceed.
+     * @param username
+     * @return boolean (whether username exist or not)
+     */
+    private  boolean checkUser(String username){
+        if(humLogController.checkUser(username).equalsIgnoreCase("correct")){
+            return false;
+        }else {
+            return true;
         }
     }
 
@@ -195,6 +213,12 @@ public class CustomerSignUpPageOneActivity extends ActionBarActivity {
         customerSignUpPageTwoIntent.putExtra("Type" , userType);
     }
 
+    /**
+     * This method will show a error with a message provided.
+     * The code is taken from stackoverflow with the following link
+     * http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android.
+     * @param message
+     */
     private void showError(String message){
         AlertDialog.Builder errorBuilder = new AlertDialog.Builder(CustomerSignUpPageOneActivity.this);
         errorBuilder.setMessage(message)

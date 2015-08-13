@@ -120,7 +120,7 @@ public class HumLogModel extends Application{
         }
     }
 
-    public String checkUser(final String username) {
+    public String checkUser( String username) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username", username);
@@ -646,16 +646,43 @@ public class HumLogModel extends Application{
         }
     }
 
-    public String getCustomerFirstName(String username){
+    public List<String> getTradeUsernameList (String city , String trade){
+        List<String> usernameList = new ArrayList<String>();
         try{
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
-            query.whereEqualTo("Username" , username);
-            ParseObject object = query.getFirst();
-            return object.getString("FirstName");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("City" , city);
+            query.whereEqualTo("Trade", trade);
+            query.orderByAscending("Score");
+            List<ParseObject> objectList = query.find();
 
+            for(int i=0; i<objectList.size(); i++){
+                usernameList.add(i , objectList.get(i).getString("Username"));
+            }
         }catch (Exception e){
-            return e.getMessage();
+            Log.d("HumLogModel" , "Error while finding out trade posts: "+e.getMessage());
         }
+
+        return usernameList;
+    }
+
+
+    public List<String> getTradeDetailsList(String city , String trade){
+        List<String> detailList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("City", city);
+            query.whereEqualTo("Trade", trade);
+            query.orderByAscending("Score");
+            List<ParseObject> objectList = query.find();
+
+            for(int i =0; i<objectList.size(); i++){
+
+                detailList.add(i , objectList.get(i).getString("About"));
+            }
+        }catch (Exception e){
+            Log.d("HumLogModel" , "Error in getting ad list from advertisement");
+        }
+        return detailList;
     }
 
 }

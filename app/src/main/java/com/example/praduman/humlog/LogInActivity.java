@@ -72,7 +72,11 @@ public class LogInActivity extends ActionBarActivity {
 
                 }
                 else {
-                    Toast.makeText(LogInActivity.this, "Fill all the fields" , Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder errorBuilder = new AlertDialog.Builder(LogInActivity.this);
+                    errorBuilder.setMessage("Fill all fields")
+                            .setTitle("Error").setPositiveButton("OK" , null);
+                    AlertDialog dialog = errorBuilder.create();
+                    dialog.show();
                 }
             }
         });
@@ -113,6 +117,9 @@ public class LogInActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * This method will set the flags for homeActivityIntent.
+     */
     private void setFlags(){
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         homeActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

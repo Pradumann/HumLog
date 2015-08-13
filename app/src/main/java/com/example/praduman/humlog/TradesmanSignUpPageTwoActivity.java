@@ -50,12 +50,21 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         setActionListeners();
     }
 
+    /**
+     * This method will set the spinner for city selection
+     * field of the sign up age two.
+     */
     private void setSpinner(){
         citySpinner = (Spinner) findViewById(R.id.tradesmanSignUpPageTwoCitySpinner);
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this , R.array.cities, android.R.layout.simple_list_item_1);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         citySpinner.setAdapter(arrayAdapter);
     }
+
+    /**
+     * This method will set the Edit texts
+     * for the fields.
+     */
     private void setEditTexts(){
         mobileNumberEditText = (EditText) findViewById(R.id.tradesmanSignUpPageTwoMobileNumberField);
         houseNumberEditText = (EditText) findViewById(R.id.tradesmanSignUpPageTwoHouseNumberField);
@@ -64,6 +73,13 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         postCodeEditText = (EditText) findViewById(R.id.tradesmanSignUpPageTwoPostCodeField);
     }
 
+
+    /**
+     * This method will set the action listeners
+     * for the sign up button and
+     * eventually navigate the user to his/her
+     * home page.
+     */
     private void setActionListeners(){
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +118,12 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * This method will set up all the initial data
+     * for the user before signing up and check
+     * whether they are filled properly.
+     * @return boolean (whether fields are filled propely)
+     */
     private boolean setAndCheckFields(){
         firstName = getIntent().getStringExtra("FirstName");
         lastName = getIntent().getStringExtra("LastName");
@@ -124,18 +146,29 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * This method will check whether passed string
+     * have characters only or not.
+     * @param string
+     * @return boolean (whether string have only characetrs)
+     */
     private boolean checkString(String string){
-        char[] chars = string.toCharArray();
+        Pattern pattern = Pattern.compile("[a-zA-Z\\s]+");
+        Matcher match = pattern.matcher(string);
 
-        for (char c : chars) {
-            if(!Character.isLetter(c)) {
-                return false;
-            }
+        if(match.matches()){
+            return true;
+        }else {
+            return false;
         }
-
-        return true;
     }
 
+    /**
+     * This method will check if
+     * any of the city is selected or not.
+     * @param city
+     * @return boolean (city selected or not)
+     */
     public boolean checkCity(String city){
         return city.equalsIgnoreCase("Select city");
     }
@@ -147,6 +180,10 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         return  matcher.matches();
     }
 
+    /**
+     * This method will create a new user and navigate the
+     * user to home page.
+     */
     private void createNewUserAndLogIn(){
 
         humLogController.setUserEssentials(eMail , password , userType , firstName , lastName
@@ -168,6 +205,13 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         startActivity(homeActivityIntent);
     }
 
+
+    /**
+     * This method show the dialogue box with a message given.
+     * The code is taken from stackoverflow with following link
+     * http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+     * @param message
+     */
     private void showError(String message){
         AlertDialog.Builder errorBuilder = new AlertDialog.Builder(TradesmanSignUpPageTwoActivity.this);
         errorBuilder.setMessage(message)
@@ -175,5 +219,4 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         AlertDialog dialog = errorBuilder.create();
         dialog.show();
     }
-
 }

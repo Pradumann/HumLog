@@ -202,7 +202,7 @@ public class HomeActivity extends ActionBarActivity {
                 if(citySelected.equalsIgnoreCase("Select City")|| tradeSelected.equalsIgnoreCase("Select Trade")) {
                    showError("Error" ,  "Select both city and trade");
                 }else {
-                    bar.setVisibility(View.VISIBLE);
+
                     if (userType.equalsIgnoreCase("customer")) {
                         searchTradeProfiles();
                     } else {
@@ -258,32 +258,37 @@ public class HomeActivity extends ActionBarActivity {
     private void searchAdvertisement(){
         List<String> usernameList = new ArrayList<String>();
         usernameList = humLogController.getAdSearchResultUsernameList(citySelected, tradeSelected);
-        String [] u = usernameList.toArray(new String[usernameList.size()]);
-
-        searchResultFirstNameList = humLogController.getAdvertisementFirstNameList(usernameList);
-        searchResultLastNameList = humLogController.getAdvertisementLastNameList(usernameList);
-        searchResultStreetList = humLogController.getAdvertisementStreetList(usernameList);
-        searchResultLocalityList = humLogController.getAdvertisementLocalityList(usernameList);
-        searchResultMobileNumberList = humLogController.getAdvertisementMobileNumberList(usernameList);
-        searchResultPostCodeList = humLogController.getAdvertisementPostCodeList(usernameList);
-        searchResultDetailsList = humLogController.getAdvertisementDetailsList(citySelected, tradeSelected);
-
-        searchResultFirstName = searchResultFirstNameList.toArray(new String[searchResultFirstNameList.size()]);
-        searchResultLastName = searchResultLastNameList.toArray(new String[searchResultLastNameList.size()]);
-        searchResultStreet = searchResultStreetList.toArray(new String[searchResultStreetList.size()]);
-        searchResultLocality = searchResultLocalityList.toArray(new String[searchResultLocalityList.size()]);
-        searchResultMobileNumber =searchResultMobileNumberList.toArray(new String[searchResultMobileNumberList.size()]);
-        searchResultPostCode = searchResultPostCodeList.toArray(new String[searchResultPostCodeList.size()]);
-        searchResultDetails = searchResultDetailsList.toArray(new String[searchResultDetailsList.size()]);
-        interestButton = new String[searchResultFirstNameList.size()];
-        for(int i =0; i<searchResultFirstNameList.size(); i++){
-            interestButton[i] = "Interested";
+        if(usernameList.isEmpty()){
+            showError("OOPS..!!!" , "Sorry..! we do not have results to show for this time");
         }
 
-        searchList.setAdapter(new myAdAdapter(this , searchResultFirstName , searchResultLastName , searchResultStreet
-        , searchResultLocality , searchResultMobileNumber , searchResultPostCode , searchResultDetails , interestButton));
+        else {
+            bar.setVisibility(View.VISIBLE);
+            searchResultFirstNameList = humLogController.getAdvertisementFirstNameList(usernameList);
+            searchResultLastNameList = humLogController.getAdvertisementLastNameList(usernameList);
+            searchResultStreetList = humLogController.getAdvertisementStreetList(usernameList);
+            searchResultLocalityList = humLogController.getAdvertisementLocalityList(usernameList);
+            searchResultMobileNumberList = humLogController.getAdvertisementMobileNumberList(usernameList);
+            searchResultPostCodeList = humLogController.getAdvertisementPostCodeList(usernameList);
+            searchResultDetailsList = humLogController.getAdvertisementDetailsList(citySelected, tradeSelected);
 
-        bar.setVisibility(View.GONE);
+            searchResultFirstName = searchResultFirstNameList.toArray(new String[searchResultFirstNameList.size()]);
+            searchResultLastName = searchResultLastNameList.toArray(new String[searchResultLastNameList.size()]);
+            searchResultStreet = searchResultStreetList.toArray(new String[searchResultStreetList.size()]);
+            searchResultLocality = searchResultLocalityList.toArray(new String[searchResultLocalityList.size()]);
+            searchResultMobileNumber = searchResultMobileNumberList.toArray(new String[searchResultMobileNumberList.size()]);
+            searchResultPostCode = searchResultPostCodeList.toArray(new String[searchResultPostCodeList.size()]);
+            searchResultDetails = searchResultDetailsList.toArray(new String[searchResultDetailsList.size()]);
+            interestButton = new String[searchResultFirstNameList.size()];
+            for (int i = 0; i < searchResultFirstNameList.size(); i++) {
+                interestButton[i] = "Interested";
+            }
+
+            searchList.setAdapter(new myAdAdapter(this, searchResultFirstName, searchResultLastName, searchResultStreet
+                    , searchResultLocality, searchResultMobileNumber, searchResultPostCode, searchResultDetails, interestButton));
+
+            bar.setVisibility(View.GONE);
+        }
     }
 
     private void startTradeProfileActivity(){
@@ -308,6 +313,38 @@ public class HomeActivity extends ActionBarActivity {
 
     private void searchTradeProfiles(){
 
+        List<String> usernameList = new ArrayList<String>();
+        usernameList = humLogController.getTradeUsernameList(citySelected , tradeSelected);
+
+        if(usernameList.isEmpty()){
+            showError("OOPS..!!!" , "Sorry..! we do not have results to show for this time");
+        }else {
+            bar.setVisibility(View.VISIBLE);
+            searchResultFirstNameList = humLogController.getTradeFirstNameList(usernameList);
+            searchResultLastNameList = humLogController.getTradeLastNameList(usernameList);
+            searchResultStreetList = humLogController.getTradeStreetList(usernameList);
+            searchResultLocalityList = humLogController.getTradeLocalityList(usernameList);
+            searchResultMobileNumberList = humLogController.getTradeMobileNumberList(usernameList);
+            searchResultPostCodeList = humLogController.getTradePostCodeList(usernameList);
+            searchResultDetailsList = humLogController.getTradeDetailsList(citySelected, tradeSelected);
+
+            searchResultFirstName = searchResultFirstNameList.toArray(new String[searchResultFirstNameList.size()]);
+            searchResultLastName = searchResultLastNameList.toArray(new String[searchResultLastNameList.size()]);
+            searchResultStreet = searchResultStreetList.toArray(new String[searchResultStreetList.size()]);
+            searchResultLocality = searchResultLocalityList.toArray(new String[searchResultLocalityList.size()]);
+            searchResultMobileNumber = searchResultMobileNumberList.toArray(new String[searchResultMobileNumberList.size()]);
+            searchResultPostCode = searchResultPostCodeList.toArray(new String[searchResultPostCodeList.size()]);
+            searchResultDetails = searchResultDetailsList.toArray(new String[searchResultDetailsList.size()]);
+            interestButton = new String[searchResultFirstNameList.size()];
+            for (int i = 0; i < searchResultFirstNameList.size(); i++) {
+                interestButton[i] = "Interested";
+            }
+
+            searchList.setAdapter(new myAdAdapter(this, searchResultFirstName, searchResultLastName, searchResultStreet
+                    , searchResultLocality, searchResultMobileNumber, searchResultPostCode, searchResultDetails, interestButton));
+
+            bar.setVisibility(View.GONE);
+        }
     }
 
 
