@@ -631,19 +631,31 @@ public class HumLogModel extends Application{
         try{
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
             query.whereEqualTo("City", city);
-       //     query.whereEqualTo("Trade" , trade);
+            query.whereEqualTo("Trade" , trade);
             List<ParseObject> objectList = query.find();
 
             for(int i =0; i<objectList.size(); i++){
 
                 usernameList.add(i , objectList.get(i).getString("Username"));
+
             }
+            return usernameList;
         }catch (Exception e){
             Log.d("HumLogModel" , "Error in getting ad list from advertisement");
+            return usernameList;
         }
-        usernameList.add("fuck you");
-        return usernameList;
-     //   return usernameList;
+    }
+
+    public String getCustomerFirstName(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username" , username);
+            ParseObject object = query.getFirst();
+            return object.getString("FirstName");
+
+        }catch (Exception e){
+            return e.getMessage();
+        }
     }
 
 }

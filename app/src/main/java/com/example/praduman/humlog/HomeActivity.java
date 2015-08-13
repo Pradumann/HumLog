@@ -10,6 +10,7 @@
 package com.example.praduman.humlog;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 
@@ -23,8 +24,10 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,7 @@ public class HomeActivity extends ActionBarActivity {
     private List<String> interestButtonList;
     private String citySelected;
     private String tradeSelected;
+    private ProgressBar bar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,18 +191,23 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void setButtonAction(){
-        citySelected = citySpinner.getSelectedItem().toString();
-        tradeSelected= tradesSpinner.getSelectedItem().toString();
+        bar = (ProgressBar) findViewById(R.id.progressBar1);
         searchList = (ListView) findViewById(R.id.searchResultRelativeLayout);
         searchButton = (Button) findViewById(R.id.selectionbarHomeSearchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (userType.equalsIgnoreCase("customer")) {
-                    searchTradeProfiles();
-                } else {
-                    searchAdvertisement();
+                citySelected = citySpinner.getSelectedItem().toString();
+                tradeSelected= tradesSpinner.getSelectedItem().toString();
+                if(citySelected.equalsIgnoreCase("Select City")|| tradeSelected.equalsIgnoreCase("Select Trade")) {
+                   showError("Error" ,  "Select both city and trade");
+                }else {
+                    bar.setVisibility(View.VISIBLE);
+                    if (userType.equalsIgnoreCase("customer")) {
+                        searchTradeProfiles();
+                    } else {
+                        searchAdvertisement();
+                    }
                 }
             }
         });
@@ -271,8 +280,10 @@ public class HomeActivity extends ActionBarActivity {
             interestButton[i] = "Interested";
         }
 
-        searchList.setAdapter(new myAdAdapter(this , u , searchResultLastName , searchResultStreet
+        searchList.setAdapter(new myAdAdapter(this , searchResultFirstName , searchResultLastName , searchResultStreet
         , searchResultLocality , searchResultMobileNumber , searchResultPostCode , searchResultDetails , interestButton));
+
+        bar.setVisibility(View.GONE);
     }
 
     private void startTradeProfileActivity(){
@@ -388,5 +399,13 @@ public class HomeActivity extends ActionBarActivity {
             interestedButton.setText(temp.button);
             return searchResultRow;
         }
+    }
+
+    private void showError (String title , String errorMessage){
+        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(HomeActivity.this);
+        errorBuilder.setMessage(errorMessage)
+                .setTitle(title).setPositiveButton("OK" , null);
+        AlertDialog dialog = errorBuilder.create();
+        dialog.show();
     }
 }
