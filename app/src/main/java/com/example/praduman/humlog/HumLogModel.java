@@ -29,6 +29,7 @@ public class HumLogModel extends Application{
     private   ParseObject user;
     private   ParseObject advertisement;
     private   ParseObject tradeProfile;
+    private   ParseObject relations;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
@@ -36,6 +37,7 @@ public class HumLogModel extends Application{
         user = new ParseObject("User");
         advertisement = new ParseObject("Advertisement");
         tradeProfile = new ParseObject("TradeProfile");
+        relations = new ParseObject("Relations");
     }
 
     public void createNewUser(String username, String password , String userType){
@@ -543,6 +545,20 @@ public class HumLogModel extends Application{
         }
     }
 
+    public boolean checkAds(String username){
+
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("Username", username);
+            ParseObject object = query.getFirst();
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+
     public String getAboutText(String username){
        try {
            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
@@ -683,6 +699,28 @@ public class HumLogModel extends Application{
             Log.d("HumLogModel" , "Error in getting ad list from advertisement");
         }
         return detailList;
+    }
+
+    public void setRelations(String username , String otherUsername , String city , String trade){
+
+        relations.put("Username" , username);
+        relations.put("otherUsername" , otherUsername);
+        relations.put("City" , city);
+        relations.put("Trade" , trade);
+        relations.saveInBackground();
+    }
+
+    public int getRatingInt(String username){
+        int rating;
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username" , username);
+            ParseObject object = query.getFirst();
+            rating = object.getInt("Ratings");
+        }catch (Exception e){
+            rating =0;
+        }
+        return rating;
     }
 
 }

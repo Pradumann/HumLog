@@ -145,7 +145,8 @@ public class MyAdActivity extends ActionBarActivity {
 
     private void setDeleteButtonActionListener(int position){
         humLogController.deleteAdvertisement(username , position);
-        Toast.makeText(this , "Advertisement "+ position+1 + "has been deleted" , Toast.LENGTH_LONG).show();
+        int pos = position+1;
+        Toast.makeText(this , "Advertisement "+ pos + "has been deleted" , Toast.LENGTH_LONG).show();
         this.finish();
     }
 }

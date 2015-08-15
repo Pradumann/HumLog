@@ -195,6 +195,10 @@ public class HumLogController implements Serializable {
         return humLogModel.checkProfiles(username);
     }
 
+    public boolean checkAdPosted(String username){
+        return humLogModel.checkAds(username);
+    }
+
     public String getAboutText(String username){
         return humLogModel.getAboutText(username);
     }
@@ -257,6 +261,16 @@ public class HumLogController implements Serializable {
         return localityList;
     }
 
+    public List<String> getAdvertisementCityList(List<String> usernameList){
+        List<String> cityList = new ArrayList<String>();
+
+        for(int i =0; i<usernameList.size(); i++){
+            cityList.add(i , humLogModel.getCity(usernameList.get(i), "customer"));
+        }
+
+        return cityList;
+    }
+
     public List<String> getAdvertisementMobileNumberList(List<String> usernameList ){
 
         List<String> mobileNumberList = new ArrayList<String>();
@@ -285,7 +299,7 @@ public class HumLogController implements Serializable {
     }
 /*************Here start the methods of trade lists***/
     public List<String> getTradeUsernameList(String city , String trade){
-        return humLogModel.getTradeUsernameList(city , trade);
+        return humLogModel.getTradeUsernameList(city, trade);
     }
 
     public List<String> getTradeFirstNameList(List<String> usernameList ){
@@ -329,6 +343,25 @@ public class HumLogController implements Serializable {
         return localityList;
     }
 
+    public List<String> getTradeCityList(List<String> usernameList){
+        List<String> cityList = new ArrayList<String>();
+        for (int i=0; i<usernameList.size(); i++){
+            cityList.add(humLogModel.getCity(usernameList.get(i) , "tradesman"));
+        }
+        return cityList;
+    }
+
+    public List<String> getTradeRatingList(List<String> usernameList){
+        List<String> ratingList = new ArrayList<String>();
+
+        for (int i=0; i<usernameList.size(); i++){
+            int rating = humLogModel.getRatingInt(usernameList.get(i));
+            ratingList.add( i , String.valueOf(rating));
+        }
+        return ratingList;
+    }
+
+
     public List<String> getTradeMobileNumberList(List<String> usernameList ){
 
         List<String> mobileNumberList = new ArrayList<String>();
@@ -354,6 +387,11 @@ public class HumLogController implements Serializable {
     public List<String> getTradeDetailsList( String city , String trade){
 
         return humLogModel.getTradeDetailsList(city, trade);
+    }
+
+    public void setRelations(String username , String otherUsername , String city , String trade){
+
+        humLogModel.setRelations(username , otherUsername , city , trade);
     }
 
     /**

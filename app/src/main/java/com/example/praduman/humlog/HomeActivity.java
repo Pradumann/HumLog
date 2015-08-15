@@ -14,8 +14,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,20 +48,27 @@ public class HomeActivity extends ActionBarActivity {
     private String lastName;
     private ListView searchList;
     private Button searchButton;
+    private Button interestedButton;
     private String [] searchResultFirstName;
     private String [] searchResultLastName;
     private String [] searchResultStreet;
     private String [] searchResultLocality;
-    private String [] searchResultMobileNumber;
+    private String [] searchResultCity;
     private String [] searchResultPostCode;
+    private String [] searchResultRatings;
+    private String [] searchResultMobileNumber;
     private String [] searchResultDetails;
     private String [] interestButton;
+    private List<String> usernameList;
     private List<String> searchResultFirstNameList;
     private List<String> searchResultLastNameList;
     private List<String> searchResultStreetList;
     private List<String> searchResultLocalityList;
-    private List<String> searchResultMobileNumberList;
+    private List<String> searchResultCityList;
     private List<String> searchResultPostCodeList;
+    private List<String> searchResultRatingsList;
+    private List<String> searchResultMobileNumberList;
+
     private List<String> searchResultDetailsList;
     private List<String> interestButtonList;
     private String citySelected;
@@ -75,6 +85,7 @@ public class HomeActivity extends ActionBarActivity {
         setFirstNameText();
         setNavigationList();
         setButtonAction();
+        Toast.makeText(this , "Swipe right for menu" , Toast.LENGTH_LONG).show();
     }
 
     private void setDetails(){
@@ -154,7 +165,11 @@ public class HomeActivity extends ActionBarActivity {
                 } else if (stringClicked.equalsIgnoreCase("My Trade Details")) {
                     startTradeProfileActivity();
                 } else if (stringClicked.equalsIgnoreCase("My Ratings")) {
-                    startMyRatingActivity();
+                    if(checkPreRatings()){
+                        startMyRatingActivity();
+                    }else {
+                        showError("OOPS...!!!" , "You do not have any ratings yet. Make your trade profile first");
+                    }
                 } else if (stringClicked.equalsIgnoreCase("My Interests")) {
                     startMyInterestActivityForTradesman();
                 }
@@ -182,7 +197,11 @@ public class HomeActivity extends ActionBarActivity {
                 } else if (stringClicked.equalsIgnoreCase("Post Ad")) {
                     startPostAdActivity();
                 } else if (stringClicked.equalsIgnoreCase("My Ad's")) {
-                    startMYAdActivity();
+                    if(checkPreAd()){
+                        startMYAdActivity();
+                    }else {
+                        showError("OOPS...!!!" , "You do not have any ads posted. Go ahead, post one");
+                    }
                 } else if (stringClicked.equalsIgnoreCase("My Interests")) {
                     startMyInterestActivityForCustomer();
                 }
@@ -197,16 +216,19 @@ public class HomeActivity extends ActionBarActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bar.setVisibility(View.VISIBLE);
                 citySelected = citySpinner.getSelectedItem().toString();
                 tradeSelected= tradesSpinner.getSelectedItem().toString();
                 if(citySelected.equalsIgnoreCase("Select City")|| tradeSelected.equalsIgnoreCase("Select Trade")) {
                    showError("Error" ,  "Select both city and trade");
+                    bar.setVisibility(View.GONE);
                 }else {
-
                     if (userType.equalsIgnoreCase("customer")) {
                         searchTradeProfiles();
+                        bar.setVisibility(View.GONE);
                     } else {
                         searchAdvertisement();
+                        bar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -233,6 +255,10 @@ public class HomeActivity extends ActionBarActivity {
         startActivity(postAdActivityIntent);
     }
 
+    private boolean checkPreAd(){
+        return humLogController.checkAdPosted(username);
+    }
+
     private void startEditProfileActivity(){
         Intent EditProfileActivityIntent = new Intent(this , EditProfileActivity.class);
         EditProfileActivityIntent.putExtra("username" , username);
@@ -252,24 +278,26 @@ public class HomeActivity extends ActionBarActivity {
 
     private void startMyInterestActivityForCustomer(){
 
+        // for the customer.
     }
 
 
     private void searchAdvertisement(){
-        List<String> usernameList = new ArrayList<String>();
+        usernameList = new ArrayList<String>();
         usernameList = humLogController.getAdSearchResultUsernameList(citySelected, tradeSelected);
         if(usernameList.isEmpty()){
             showError("OOPS..!!!" , "Sorry..! we do not have results to show for this time");
+            bar.setVisibility(View.GONE);
         }
 
         else {
-            bar.setVisibility(View.VISIBLE);
             searchResultFirstNameList = humLogController.getAdvertisementFirstNameList(usernameList);
             searchResultLastNameList = humLogController.getAdvertisementLastNameList(usernameList);
             searchResultStreetList = humLogController.getAdvertisementStreetList(usernameList);
             searchResultLocalityList = humLogController.getAdvertisementLocalityList(usernameList);
-            searchResultMobileNumberList = humLogController.getAdvertisementMobileNumberList(usernameList);
+            searchResultCityList = humLogController.getAdvertisementCityList(usernameList);
             searchResultPostCodeList = humLogController.getAdvertisementPostCodeList(usernameList);
+            searchResultMobileNumberList = humLogController.getAdvertisementMobileNumberList(usernameList);
             searchResultDetailsList = humLogController.getAdvertisementDetailsList(citySelected, tradeSelected);
 
             searchResultFirstName = searchResultFirstNameList.toArray(new String[searchResultFirstNameList.size()]);
@@ -279,15 +307,18 @@ public class HomeActivity extends ActionBarActivity {
             searchResultMobileNumber = searchResultMobileNumberList.toArray(new String[searchResultMobileNumberList.size()]);
             searchResultPostCode = searchResultPostCodeList.toArray(new String[searchResultPostCodeList.size()]);
             searchResultDetails = searchResultDetailsList.toArray(new String[searchResultDetailsList.size()]);
+            searchResultCity = searchResultCityList.toArray(new String[searchResultCityList.size()]);
             interestButton = new String[searchResultFirstNameList.size()];
+            searchResultRatings = new String[usernameList.size()];
             for (int i = 0; i < searchResultFirstNameList.size(); i++) {
                 interestButton[i] = "Interested";
+                searchResultRatings[i] = "";
             }
 
             searchList.setAdapter(new myAdAdapter(this, searchResultFirstName, searchResultLastName, searchResultStreet
-                    , searchResultLocality, searchResultMobileNumber, searchResultPostCode, searchResultDetails, interestButton));
+                    , searchResultLocality, searchResultMobileNumber, searchResultPostCode, searchResultDetails, interestButton
+                    , searchResultCity ,searchResultRatings));
 
-            bar.setVisibility(View.GONE);
         }
     }
 
@@ -299,6 +330,10 @@ public class HomeActivity extends ActionBarActivity {
         startActivity(tradeProfileActivityIntent);
     }
 
+    private boolean checkPreRatings(){
+       return humLogController.checkTradeProfile(username);
+    }
+
     private void startMyRatingActivity(){
         Intent myRatingActivityIntent = new Intent(this , MyRatingActivity.class);
         myRatingActivityIntent.putExtra("username" , username);
@@ -307,25 +342,26 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void startMyInterestActivityForTradesman(){
-
-
+        // for tradesman
     }
 
     private void searchTradeProfiles(){
 
-        List<String> usernameList = new ArrayList<String>();
+        usernameList = new ArrayList<String>();
         usernameList = humLogController.getTradeUsernameList(citySelected , tradeSelected);
 
         if(usernameList.isEmpty()){
             showError("OOPS..!!!" , "Sorry..! we do not have results to show for this time");
+            bar.setVisibility(View.GONE);
         }else {
-            bar.setVisibility(View.VISIBLE);
             searchResultFirstNameList = humLogController.getTradeFirstNameList(usernameList);
             searchResultLastNameList = humLogController.getTradeLastNameList(usernameList);
             searchResultStreetList = humLogController.getTradeStreetList(usernameList);
             searchResultLocalityList = humLogController.getTradeLocalityList(usernameList);
-            searchResultMobileNumberList = humLogController.getTradeMobileNumberList(usernameList);
+            searchResultCityList = humLogController.getTradeCityList(usernameList);
             searchResultPostCodeList = humLogController.getTradePostCodeList(usernameList);
+            searchResultMobileNumberList = humLogController.getTradeMobileNumberList(usernameList);
+            searchResultRatingsList = humLogController.getTradeRatingList(usernameList);
             searchResultDetailsList = humLogController.getTradeDetailsList(citySelected, tradeSelected);
 
             searchResultFirstName = searchResultFirstNameList.toArray(new String[searchResultFirstNameList.size()]);
@@ -335,15 +371,18 @@ public class HomeActivity extends ActionBarActivity {
             searchResultMobileNumber = searchResultMobileNumberList.toArray(new String[searchResultMobileNumberList.size()]);
             searchResultPostCode = searchResultPostCodeList.toArray(new String[searchResultPostCodeList.size()]);
             searchResultDetails = searchResultDetailsList.toArray(new String[searchResultDetailsList.size()]);
+            searchResultRatings = searchResultRatingsList.toArray(new String[searchResultRatingsList.size()]);
+            searchResultCity = searchResultCityList.toArray(new String[searchResultRatingsList.size()]);
+            searchResultRatings = searchResultRatingsList.toArray(new String[searchResultRatingsList.size()]);
             interestButton = new String[searchResultFirstNameList.size()];
             for (int i = 0; i < searchResultFirstNameList.size(); i++) {
                 interestButton[i] = "Interested";
             }
 
             searchList.setAdapter(new myAdAdapter(this, searchResultFirstName, searchResultLastName, searchResultStreet
-                    , searchResultLocality, searchResultMobileNumber, searchResultPostCode, searchResultDetails, interestButton));
+                    , searchResultLocality, searchResultMobileNumber, searchResultPostCode, searchResultDetails,
+                    interestButton , searchResultCity , searchResultRatings));
 
-            bar.setVisibility(View.GONE);
         }
     }
 
@@ -362,9 +401,11 @@ public class HomeActivity extends ActionBarActivity {
         String postCode;
         String details;
         String button;
+        String ratings;
+        String city;
 
         public myAdRow(String firstName , String lastName , String street , String locality , String mobileNumber
-        , String postCode , String details , String button){
+        , String postCode , String details , String button , String city , String ratings){
 
             this.firstName = firstName;
             this.lastName = lastName;
@@ -374,6 +415,8 @@ public class HomeActivity extends ActionBarActivity {
             this.postCode = postCode;
             this.details = details;
             this.button = button;
+            this.city = city;
+            this.ratings = ratings;
         }
     }
 
@@ -384,12 +427,12 @@ public class HomeActivity extends ActionBarActivity {
         Context context;
 
         public myAdAdapter(Context context ,String [] firstName , String [] lastName , String [] street , String [] locality
-        , String [] mobileNumber , String [] postCode , String [] details , String[] button){
+        , String [] mobileNumber , String [] postCode , String [] details , String[] button , String[] city, String [] ratings){
             this.context = context;
             list = new ArrayList<myAdRow>();
             for(int i =0; i< firstName.length; i++){
                 list.add(new myAdRow(firstName[i] , lastName[i] , street[i] , locality[i] , mobileNumber[i],
-                        postCode[i] , details[i] , button[i]));
+                        postCode[i] , details[i] , button[i] , city[i] , ratings [i]));
             }
         }
 
@@ -422,8 +465,15 @@ public class HomeActivity extends ActionBarActivity {
             TextView mySearchResultRowMobileNumber = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowNumberText);
             TextView mySearchResultRowPostCode = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowPostCodeText);
             TextView mySearchResultRowDetails = (TextView) searchResultRow.findViewById(R.id.mySearchResultDetailText);
-            Button interestedButton = (Button) searchResultRow.findViewById(R.id.mySearchResultInterestedButton);
-
+            TextView mySearchResultCity = (TextView) searchResultRow.findViewById(R.id.mySearchResultRowCityText);
+            interestedButton = (Button) searchResultRow.findViewById(R.id.mySearchResultInterestedButton);
+            interestedButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInterestedButtonAction(position);
+                    disableItem(position);
+                }
+            });
 
             myAdRow temp = list.get(position);
             mySearchResultRowFirstName.setText(temp.firstName);
@@ -433,8 +483,47 @@ public class HomeActivity extends ActionBarActivity {
             mySearchResultRowMobileNumber.setText(temp.mobileNumber);
             mySearchResultRowPostCode.setText(temp.postCode);
             mySearchResultRowDetails.setText(temp.details);
+            mySearchResultCity.setText(temp.city);
+            if(userType.equalsIgnoreCase("customer")){
+                RatingBar mySearchResultRatingBar = (RatingBar) searchResultRow.findViewById(R.id.mySearchResultRatingBar);
+                float rating = Float.parseFloat(temp.ratings);
+                mySearchResultRatingBar.setRating(rating);
+                mySearchResultRatingBar.setFocusable(false);
+            }else {
+                RatingBar mySearchResultRatingBar = (RatingBar) searchResultRow.findViewById(R.id.mySearchResultRatingBar);
+                mySearchResultRatingBar.setVisibility(View.INVISIBLE);
+            }
             interestedButton.setText(temp.button);
             return searchResultRow;
+        }
+    }
+
+    private void setInterestedButtonAction(int position){
+
+        String otherUsername = usernameList.get(position);
+        humLogController.setRelations(username , otherUsername , citySelected , tradeSelected);
+    }
+
+    private void disableItem(int position){
+        getViewByPosition(position, searchList).setBackgroundColor((Color.parseColor("#e4e4e4")));
+        getViewByPosition(position , searchList).setEnabled(false);
+    }
+
+    /**
+     * http://stackoverflow.com/questions/24811536/android-listview-get-item-view-by-position
+     * @param pos
+     * @param listView
+     * @return
+     */
+    private View getViewByPosition(int pos, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            return listView.getAdapter().getView(pos, null, listView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return listView.getChildAt(childIndex);
         }
     }
 
