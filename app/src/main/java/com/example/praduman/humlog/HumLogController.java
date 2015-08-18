@@ -224,7 +224,7 @@ public class HumLogController implements Serializable {
         List<String> firstNameList = new ArrayList<String>();
 
         for(int i =0; i<usernameList.size(); i++){
-            firstNameList.add(i , humLogModel.getFirstName(usernameList.get(i) , "customer"));
+            firstNameList.add(i, humLogModel.getFirstName(usernameList.get(i), "customer"));
         }
         return firstNameList;
     }
@@ -234,7 +234,7 @@ public class HumLogController implements Serializable {
         List<String> lastNameList = new ArrayList<String>();
 
         for(int i =0; i<usernameList.size(); i++){
-            lastNameList.add(i , humLogModel.getLastName(usernameList.get(i), "customer"));
+            lastNameList.add(i, humLogModel.getLastName(usernameList.get(i), "customer"));
         }
 
         return lastNameList;
@@ -346,7 +346,7 @@ public class HumLogController implements Serializable {
     public List<String> getTradeCityList(List<String> usernameList){
         List<String> cityList = new ArrayList<String>();
         for (int i=0; i<usernameList.size(); i++){
-            cityList.add(humLogModel.getCity(usernameList.get(i) , "tradesman"));
+            cityList.add(humLogModel.getCity(usernameList.get(i), "tradesman"));
         }
         return cityList;
     }
@@ -389,9 +389,61 @@ public class HumLogController implements Serializable {
         return humLogModel.getTradeDetailsList(city, trade);
     }
 
-    public void setRelations(String username , String otherUsername , String city , String trade){
+    public void setRelations(String username , String otherUsername , String city , String trade , String userType){
 
-        humLogModel.setRelations(username , otherUsername , city , trade);
+        if(userType.equalsIgnoreCase("customer")){
+            humLogModel.setCustomerRelation(username , otherUsername , city , trade);
+        }else {
+            humLogModel.setTradesmanRelation(username, otherUsername, city, trade);
+        }
+    }
+
+    public List<String> getCustomerRelationTableList(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")) {
+            return humLogModel.getCustomerRelationList(username);
+        }else {
+            return humLogModel.getCustomerRelationListForTradesman(username);
+        }
+
+    }
+
+    public List<String> getTradesmanRelationTableList(String username , String userType){
+
+        if(userType.equalsIgnoreCase("customer")) {
+            return humLogModel.getTradesmanRelationList(username);
+        }else {
+            return humLogModel.getTradesmanRelationListForTradesman(username);
+        }
+    }
+
+    public void updateScoreAndRatingAndJobs(float rating , String username){
+        int previousRating = humLogModel.getRatingInt(username);
+        int previousJobs = Integer.parseInt(humLogModel.getJobsDone(username));
+        int previousScore = Integer.parseInt(humLogModel.getScore(username));
+
+        int previousAverage = previousRating * previousJobs;
+        int totalJobs = previousJobs+1;
+        int newRating = (int) Math.round((previousAverage+rating)/totalJobs);
+        int newScore;
+
+        if(previousJobs>=5 && previousJobs <8){
+            newScore = previousScore - 1;
+        } else if(previousJobs >=8){
+            newScore = previousScore - previousRating + newRating + 1;
+        }else {
+            newScore = previousScore;
+        }
+        humLogModel.updateScoreCard(username , newRating , totalJobs , newScore);
+
+    }
+
+    public void deleteCustomerRelationInterest(String username , String otherUsername , int position){
+        humLogModel.deleteCustomerRelation(username , otherUsername ,  position);
+    }
+
+    public void deleteTradesmanRelationInterest(String username , String otherUsername , int position){
+        humLogModel.deleteTradesmanRelation(username , otherUsername , position);
     }
 
     /**

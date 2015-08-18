@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.praduman.humlog.MyInterestActivity"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myInterestMyInterestText"
+        android:textSize="30sp"
+        android:text="Hey this is initial text"
+        android:textColor="#ff000000" />
+
+    <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/myInterestMyInterestList"
+            android:layout_below="@+id/myInterestMyInterestText"
+            android:layout_marginTop="5dp"
+            android:background="#ffffffff"
+            android:divider="#ffffffff"
+            android:dividerHeight="10.0sp"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/myInterestOtherInterestText"
+               android:layout_below="@+id/myInterestMyInterestList"
+               android:layout_marginTop="10dp"
+               android:textSize="30sp"
+               android:text="Hey this is also an initial text"
+               android:textColor="#ff000000" />
+
+           <ListView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/myInterestOtherInterestList"
+               android:layout_below="@+id/myInterestOtherInterestText"
+               android:layout_marginTop="5dp"
+               android:background="#ffffffff"
+               android:divider="#ffffffff"
+               android:dividerHeight="10.0sp" />
+
+
+   </LinearLayout>

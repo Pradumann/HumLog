@@ -73,4 +73,5 @@
     <string name="my_rating_total_score_text">Total Score</string>
     <string name="my_rating_detail_text">Ask your customers, you worked for to rate you. Good ratings will help to
         increase your score</string>
+    <string name="title_activity_my_interest">MyInterestActivity</string>
 </resources>

@@ -277,8 +277,11 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void startMyInterestActivityForCustomer(){
-
-        // for the customer.
+        Intent myInterestActivityIntent = new Intent(this , MyInterestActivity.class);
+        myInterestActivityIntent.putExtra("username" , username);
+        myInterestActivityIntent.putExtra("userType" , userType);
+        myInterestActivityIntent.putExtra("controllerObject" , humLogController);
+        startActivity(myInterestActivityIntent);
     }
 
 
@@ -342,7 +345,11 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void startMyInterestActivityForTradesman(){
-        // for tradesman
+        Intent myInterestActivityIntent = new Intent(this , MyInterestActivity.class);
+        myInterestActivityIntent.putExtra("username" , username);
+        myInterestActivityIntent.putExtra("userType" , userType);
+        myInterestActivityIntent.putExtra("controllerObject" , humLogController);
+        startActivity(myInterestActivityIntent);
     }
 
     private void searchTradeProfiles(){
@@ -471,7 +478,7 @@ public class HomeActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     setInterestedButtonAction(position);
-                    disableItem(position);
+                    showToastForUpdate();
                 }
             });
 
@@ -501,13 +508,9 @@ public class HomeActivity extends ActionBarActivity {
     private void setInterestedButtonAction(int position){
 
         String otherUsername = usernameList.get(position);
-        humLogController.setRelations(username , otherUsername , citySelected , tradeSelected);
+        humLogController.setRelations(username , otherUsername , citySelected , tradeSelected , userType);
     }
 
-    private void disableItem(int position){
-        getViewByPosition(position, searchList).setBackgroundColor((Color.parseColor("#e4e4e4")));
-        getViewByPosition(position , searchList).setEnabled(false);
-    }
 
     /**
      * http://stackoverflow.com/questions/24811536/android-listview-get-item-view-by-position
@@ -525,6 +528,10 @@ public class HomeActivity extends ActionBarActivity {
             final int childIndex = pos - firstListItemPosition;
             return listView.getChildAt(childIndex);
         }
+    }
+
+    private void showToastForUpdate(){
+        Toast.makeText(this , "Your interest has been updated" , Toast.LENGTH_SHORT).show();
     }
 
     private void showError (String title , String errorMessage){

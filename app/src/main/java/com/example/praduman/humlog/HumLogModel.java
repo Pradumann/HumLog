@@ -29,7 +29,8 @@ public class HumLogModel extends Application{
     private   ParseObject user;
     private   ParseObject advertisement;
     private   ParseObject tradeProfile;
-    private   ParseObject relations;
+    private   ParseObject tradesmanRelation;
+    private   ParseObject customerRelation;
 
     public HumLogModel(){
         customer = new ParseObject("Customer");
@@ -37,7 +38,8 @@ public class HumLogModel extends Application{
         user = new ParseObject("User");
         advertisement = new ParseObject("Advertisement");
         tradeProfile = new ParseObject("TradeProfile");
-        relations = new ParseObject("Relations");
+        customerRelation = new ParseObject("CustomerRelation");
+        tradesmanRelation = new ParseObject("TradesmanRelation");
     }
 
     public void createNewUser(String username, String password , String userType){
@@ -701,14 +703,23 @@ public class HumLogModel extends Application{
         return detailList;
     }
 
-    public void setRelations(String username , String otherUsername , String city , String trade){
+    public void setCustomerRelation(String username , String otherUsername , String city , String trade){
 
-        relations.put("Username" , username);
-        relations.put("otherUsername" , otherUsername);
-        relations.put("City" , city);
-        relations.put("Trade" , trade);
-        relations.saveInBackground();
+        customerRelation.put("Username" , username);
+        customerRelation.put("otherUsername" , otherUsername);
+        customerRelation.put("City" , city);
+        customerRelation.put("Trade" , trade);
+        customerRelation.saveInBackground();
     }
+    public void setTradesmanRelation(String username , String otherUsername , String city , String trade){
+
+        tradesmanRelation.put("Username" , username);
+        tradesmanRelation.put("otherUsername" , otherUsername);
+        tradesmanRelation.put("City" , city);
+        tradesmanRelation.put("Trade" , trade);
+        tradesmanRelation.saveInBackground();
+    }
+
 
     public int getRatingInt(String username){
         int rating;
@@ -722,5 +733,109 @@ public class HumLogModel extends Application{
         }
         return rating;
     }
+
+    public List<String> getCustomerRelationList(String username){
+        List<String> usernameList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerRelation");
+            query.whereEqualTo("Username" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                usernameList.add(i , objectList.get(i).getString("otherUsername"));
+            }
+            return usernameList;
+        }catch (Exception e){
+            return usernameList;
+        }
+    }
+    public List<String> getCustomerRelationListForTradesman(String username){
+        List<String> usernameList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerRelation");
+            query.whereEqualTo("otherUsername" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                usernameList.add(i , objectList.get(i).getString("Username"));
+            }
+            return usernameList;
+        }catch (Exception e){
+            return usernameList;
+        }
+    }
+
+    public List<String> getTradesmanRelationList(String username){
+        List<String> usernameList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradesmanRelation");
+            query.whereEqualTo("otherUsername" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                usernameList.add(i , objectList.get(i).getString("Username"));
+            }
+            return usernameList;
+        }catch (Exception e){
+            return usernameList;
+        }
+    }
+
+    public List<String> getTradesmanRelationListForTradesman(String username){
+        List<String> usernameList = new ArrayList<String>();
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradesmanRelation");
+            query.whereEqualTo("Username" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                usernameList.add(i , objectList.get(i).getString("otherUsername"));
+            }
+            return usernameList;
+        }catch (Exception e){
+            return usernameList;
+        }
+    }
+
+    public void updateScoreCard(String username , int rating , int jobs , int score){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username" , username);
+            ParseObject object = query.getFirst();
+            object.put("Ratings" , rating);
+            object.put("Jobs" , jobs);
+            object.put("Score" , score);
+            object.saveInBackground();
+            Log.d("Score card updated" , " " + rating  + " " + jobs + " " + score);
+        }catch (Exception e){
+            Log.d("Updating score card" , e.getMessage());
+        }
+    }
+
+    public void deleteCustomerRelation(String username , String otherUsername , int position){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerRelation");
+            query.whereEqualTo("Username" , username);
+            query.whereEqualTo("otherUsername" , otherUsername);
+            List<ParseObject> objectList = query.find();
+            ParseObject object = objectList.get(position);
+            object.delete();
+            object.saveInBackground();
+        }catch (Exception e){
+            Log.d("Deleting Customer R" , e.getMessage());
+        }
+    }
+
+    public void deleteTradesmanRelation(String username , String otherUsername , int position){
+        try{
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradesmanRelation");
+            query.whereEqualTo("Username" , username);
+            query.whereEqualTo("otherUsername" , otherUsername);
+            List<ParseObject> objectList = query.find();
+            ParseObject object = objectList.get(position);
+            object.delete();
+            object.saveInBackground();
+        }catch (Exception e){
+            Log.d("Deleting Tradesman R" , e.getMessage());
+        }
+    }
+
 
 }
