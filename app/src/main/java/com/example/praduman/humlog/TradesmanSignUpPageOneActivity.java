@@ -1,7 +1,10 @@
 package com.example.praduman.humlog;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -69,37 +72,41 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (setAndCheckFields()) {
+                if(isNetworkAvailable()) {
+                    if (setAndCheckFields()) {
 
-                    if (checkString(firstName)) {
+                        if (checkString(firstName)) {
 
-                        if (checkString(lastName)) {
+                            if (checkString(lastName)) {
 
-                            if (checkEmail(eMail)) {
-                                if(checkUser(eMail)) {
-                                    if (checkPassowrd(password, repeatPassword)) {
-                                        updateIntent();
-                                        startActivity(tradesmanSignUpPageTwoIntent);
+                                if (checkEmail(eMail)) {
+                                    if (checkUser(eMail)) {
+                                        if (checkPassowrd(password, repeatPassword)) {
+                                            updateIntent();
+                                            startActivity(tradesmanSignUpPageTwoIntent);
+                                        } else {
+                                            showError("Password do not match");
+                                        }
                                     } else {
-                                        showError("Password do not match");
+                                        showError("Username already exist");
                                     }
-                                }else {
-                                    showError("Username already exist");
+
+                                } else {
+                                    showError("Invalid Email. Fill Email properly ");
                                 }
 
                             } else {
-                                showError("Invalid Email. Fill Email properly ");
+                                showError("Invalid characters. Fill Last name properly ");
                             }
 
                         } else {
-                            showError("Invalid characters. Fill Last name properly ");
+                            showError("Invalid characters. Fill First name properly ");
                         }
-
                     } else {
-                        showError("Invalid characters. Fill First name properly ");
+                        showError(" Fill all the fields ");
                     }
-                } else {
-                    showError(" Fill all the fields ");
+                }else {
+                    showError("Internet connection not available");
                 }
 
 
@@ -215,5 +222,26 @@ public class TradesmanSignUpPageOneActivity extends ActionBarActivity {
                 .setTitle("Error").setPositiveButton("OK", null);
         AlertDialog dialog = errorBuilder.create();
         dialog.show();
+    }
+
+    /**
+     * This method will check if internet is available or not
+     * This method is taken from stack overflow
+     * http://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+     * @return boolean (whether internet connection is available or not)
+     */
+    private boolean isNetworkAvailable() {
+
+        Context context = this;
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        if(activeNetwork != null && activeNetwork.isConnected()){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

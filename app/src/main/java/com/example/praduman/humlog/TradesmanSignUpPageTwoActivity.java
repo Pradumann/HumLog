@@ -1,7 +1,10 @@
 package com.example.praduman.humlog;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -84,35 +87,34 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(setAndCheckFields()){
-                    if(checkString(street)){
-                        if(checkString(locality)){
-                            if(!checkCity(city)){
-                                if(checkPostCode(postCode)){
+                if(isNetworkAvailable()) {
+                    if (setAndCheckFields()) {
+                        if (checkString(street)) {
+                            if (checkString(locality)) {
+                                if (!checkCity(city)) {
+                                    if (checkPostCode(postCode)) {
 
-                                    createNewUserAndLogIn();
+                                        createNewUserAndLogIn();
+                                    } else {
+                                        showError("Invalid Post Code");
+                                    }
+
+                                } else {
+                                    showError("Select city !!!");
                                 }
-                                else{
-                                    showError("Invalid Post Code");
-                                }
 
+                            } else {
+                                showError("Invalid characters. Fill locality properly");
                             }
-                            else{
-                                showError("Select city !!!");
-                            }
-
+                        } else {
+                            showError("Invalid characters. Fill street field properly");
                         }
-                        else {
-                            showError("Invalid characters. Fill locality properly");
-                        }
-                    }
-                    else {
-                       showError("Invalid characters. Fill street field properly");
-                    }
 
-                }
-                else {
-                   showError("Fill all fields");
+                    } else {
+                        showError("Fill all fields");
+                    }
+                }else {
+                    showError("Internet connection not available");
                 }
             }
         });
@@ -219,4 +221,27 @@ public class TradesmanSignUpPageTwoActivity extends ActionBarActivity {
         AlertDialog dialog = errorBuilder.create();
         dialog.show();
     }
+
+    /**
+     * This method will check if internet is available or not
+     * This method is taken from stack overflow
+     * http://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+     * @return boolean (whether internet connection is available or not)
+     */
+    private boolean isNetworkAvailable() {
+
+        Context context = this;
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        if(activeNetwork != null && activeNetwork.isConnected()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
 }

@@ -1,9 +1,13 @@
 package com.example.praduman.humlog;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.view.View.OnClickListener;
@@ -54,29 +58,23 @@ public class LogInActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if(setAndCheckFields()){
-                    // check for internet connection ....
-                    error = humLogController.checkUser(username, password);
-                   if(error.equalsIgnoreCase("success")){
-                       humLogController.logIn(username , password);
-                       homeActivityIntent.putExtra("username", username);
-                       setFlags();
-                       startActivity(homeActivityIntent);
-                   }
-                    else{
-                       AlertDialog.Builder errorBuilder = new AlertDialog.Builder(LogInActivity.this);
-                       errorBuilder.setMessage(error)
-                               .setTitle("Error").setPositiveButton("OK" , null);
-                       AlertDialog dialog = errorBuilder.create();
-                       dialog.show();
+                   if(isNetworkAvailable()) {
+                       error = humLogController.checkUser(username, password);
+                       if (error.equalsIgnoreCase("success")) {
+                           humLogController.logIn(username, password);
+                           homeActivityIntent.putExtra("username", username);
+                           setFlags();
+                           startActivity(homeActivityIntent);
+                       } else {
+                           showError(error);
+                       }
+                   }else {
+                       showError("Internet Connection not available");
                    }
 
                 }
                 else {
-                    AlertDialog.Builder errorBuilder = new AlertDialog.Builder(LogInActivity.this);
-                    errorBuilder.setMessage("Fill all fields")
-                            .setTitle("Error").setPositiveButton("OK" , null);
-                    AlertDialog dialog = errorBuilder.create();
-                    dialog.show();
+                    showError("Fill all fields");
                 }
             }
         });
@@ -114,6 +112,29 @@ public class LogInActivity extends ActionBarActivity {
         }
         else{
             return true;
+        }
+    }
+
+    private void showError(String error){
+        AlertDialog.Builder errorBuilder = new AlertDialog.Builder(LogInActivity.this);
+        errorBuilder.setMessage(error)
+                .setTitle("Error").setPositiveButton("OK" , null);
+        AlertDialog dialog = errorBuilder.create();
+        dialog.show();
+    }
+
+    private boolean isNetworkAvailable() {
+
+        Context context = this;
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        if(activeNetwork != null && activeNetwork.isConnected()){
+            return true;
+        }else {
+            return false;
         }
     }
 

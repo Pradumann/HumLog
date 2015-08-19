@@ -670,7 +670,7 @@ public class HumLogModel extends Application{
             ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
             query.whereEqualTo("City" , city);
             query.whereEqualTo("Trade", trade);
-            query.orderByAscending("Score");
+            query.orderByDescending("Score");
             List<ParseObject> objectList = query.find();
 
             for(int i=0; i<objectList.size(); i++){
@@ -690,7 +690,7 @@ public class HumLogModel extends Application{
             ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
             query.whereEqualTo("City", city);
             query.whereEqualTo("Trade", trade);
-            query.orderByAscending("Score");
+            query.orderByDescending("Score");
             List<ParseObject> objectList = query.find();
 
             for(int i =0; i<objectList.size(); i++){
@@ -812,7 +812,7 @@ public class HumLogModel extends Application{
         try{
             ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerRelation");
             query.whereEqualTo("Username" , username);
-            query.whereEqualTo("otherUsername" , otherUsername);
+            query.whereEqualTo("otherUsername", otherUsername);
             List<ParseObject> objectList = query.find();
             ParseObject object = objectList.get(position);
             object.delete();
@@ -837,5 +837,133 @@ public class HumLogModel extends Application{
         }
     }
 
+    public void deleteUser(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+            query.whereEqualTo("username", username);
+            ParseObject object = query.getFirst();
+            object.delete();
+            object.saveInBackground();
 
+            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("User");
+            query2.whereEqualTo("username" , username);
+            ParseObject object2 = query2.getFirst();
+            object2.delete();
+            object2.saveInBackground();
+        }catch (Exception e){
+            Log.d("Deleting Account" , e.getMessage());
+        }
+    }
+
+    public void deleteAllAdvertisements(String username){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Advertisement");
+            query.whereEqualTo("Username", username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                ParseObject ob = objectList.get(i);
+                ob.delete();
+                ob.saveInBackground();
+            }
+        }catch (Exception e){
+            Log.d("Deleting advertisement" , e.getMessage());
+        }
+    }
+
+    public void deleteCustomer(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Customer");
+            query.whereEqualTo("Username" , username);
+            ParseObject object = query.getFirst();
+            object.delete();
+            object.saveInBackground();
+        }catch (Exception e){
+            Log.d("Deleting Customer" , e.getMessage());
+        }
+    }
+
+    public void deleteAllCustomerRelationByCustomer(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerRelation");
+            query.whereEqualTo("Username" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                ParseObject ob = objectList.get(i);
+                ob.delete();
+                ob.saveInBackground();
+            }
+        }catch (Exception e){
+            Log.d("Deleting Cus. Relation" , e.getMessage());
+        }
+    }
+
+    public void deleteAllTradesmanRelationByCustomer(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradesmanRelation");
+            query.whereEqualTo("otherUsername" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                ParseObject ob = objectList.get(i);
+                ob.delete();
+                ob.saveInBackground();
+            }
+        }catch (Exception e){
+            Log.d("Deleting Trad. Relation" , e.getMessage());
+        }
+    }
+
+    public void deleteTradeProfile(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradeProfile");
+            query.whereEqualTo("Username" , username);
+            ParseObject object = query.getFirst();
+            object.delete();
+            object.saveInBackground();
+        }catch (Exception e){
+            Log.d("Delete TradeProfile" , username);
+        }
+    }
+
+    public void deleteTradesman(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tradesman");
+            query.whereEqualTo("Username" , username);
+            ParseObject object = query.getFirst();
+            object.delete();
+            object.saveInBackground();
+        }catch (Exception e){
+
+        }
+    }
+
+    public void deleteAllCustomerRelationByTradesman(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerRelation");
+            query.whereEqualTo("otherUsername" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                ParseObject ob = objectList.get(i);
+                ob.delete();
+                ob.saveInBackground();
+            }
+        }catch (Exception e){
+            Log.d("Deleting Cus. Relation" , e.getMessage());
+        }
+    }
+
+    public void deleteAllTradesmanRelationByTradesman(String username){
+        try{
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TradesmanRelation");
+            query.whereEqualTo("Username" , username);
+            List<ParseObject> objectList = query.find();
+            for(int i=0; i<objectList.size(); i++){
+                ParseObject ob = objectList.get(i);
+                ob.delete();
+                ob.saveInBackground();
+            }
+        }catch (Exception e){
+            Log.d("Deleting Trad. Relation" , e.getMessage());
+        }
+    }
 }

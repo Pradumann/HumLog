@@ -428,7 +428,7 @@ public class HumLogController implements Serializable {
         int newScore;
 
         if(previousJobs>=5 && previousJobs <8){
-            newScore = previousScore - 1;
+            newScore = previousScore + 1;
         } else if(previousJobs >=8){
             newScore = previousScore - previousRating + newRating + 1;
         }else {
@@ -439,11 +439,28 @@ public class HumLogController implements Serializable {
     }
 
     public void deleteCustomerRelationInterest(String username , String otherUsername , int position){
-        humLogModel.deleteCustomerRelation(username , otherUsername ,  position);
+        humLogModel.deleteCustomerRelation(username, otherUsername, position);
     }
 
     public void deleteTradesmanRelationInterest(String username , String otherUsername , int position){
-        humLogModel.deleteTradesmanRelation(username , otherUsername , position);
+        humLogModel.deleteTradesmanRelation(username, otherUsername, position);
+    }
+
+    public void deleteMyAccount(String username , String userType){
+        if(userType.equalsIgnoreCase("customer")){
+            humLogModel.deleteUser(username);
+            humLogModel.deleteAllAdvertisements(username);
+            humLogModel.deleteCustomer(username);
+            humLogModel.deleteAllCustomerRelationByCustomer(username);
+            humLogModel.deleteAllTradesmanRelationByCustomer(username);
+        }else {
+
+            humLogModel.deleteUser(username);
+            humLogModel.deleteTradeProfile(username);
+            humLogModel.deleteTradesman(username);
+            humLogModel.deleteAllCustomerRelationByTradesman(username);
+            humLogModel.deleteAllTradesmanRelationByTradesman(username);
+        }
     }
 
     /**

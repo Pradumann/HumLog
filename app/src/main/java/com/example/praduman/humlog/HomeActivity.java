@@ -15,6 +15,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,6 +90,9 @@ public class HomeActivity extends ActionBarActivity {
         Toast.makeText(this , "Swipe right for menu" , Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * This method will set the initial details of user
+     */
     private void setDetails(){
         username = getIntent().getStringExtra("username");
         humLogController.setDetails(username);
@@ -96,6 +101,9 @@ public class HomeActivity extends ActionBarActivity {
         lastName = humLogController.getLastName();
     }
 
+    /**
+     * Setting up the first name in XML.
+     */
     private void setFirstNameText(){
         firstNameTextView = (TextView) findViewById(R.id.userbarFirstNameText);
         firstNameTextView.setText(firstName);
@@ -118,6 +126,9 @@ public class HomeActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * This method will set the sliding navigation bar menu.
+     */
     private void setNavigationList(){
         if(userType.equalsIgnoreCase("customer")){
             createCustomerNavList();
@@ -138,6 +149,9 @@ public class HomeActivity extends ActionBarActivity {
         setTradesmanListViewAction();
     }
 
+    /**
+     * This method will set the navigation menu of navigation list.
+     */
     private void createCustomerNavList(){
         String [] navMenu = {"" , "My Interests"  ,"My Ad's" , "Post Ad" , "Edit Profile" , "Log Out"};
         ArrayAdapter<String> navAdapter = new ArrayAdapter<String>(this, R.layout.nav_list_view, navMenu);
@@ -157,21 +171,25 @@ public class HomeActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 TextView textView = (TextView) viewClicked;
                 String stringClicked = textView.getText().toString();
-                if (stringClicked.equalsIgnoreCase("Log Out")) {
-                    humLogController.logOut();
-                    startLogInActivity();
-                } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
-                    startEditProfileActivity();
-                } else if (stringClicked.equalsIgnoreCase("My Trade Details")) {
-                    startTradeProfileActivity();
-                } else if (stringClicked.equalsIgnoreCase("My Ratings")) {
-                    if(checkPreRatings()){
-                        startMyRatingActivity();
-                    }else {
-                        showError("OOPS...!!!" , "You do not have any ratings yet. Make your trade profile first");
+                if(isNetworkAvailable()) {
+                    if (stringClicked.equalsIgnoreCase("Log Out")) {
+                        humLogController.logOut();
+                        startLogInActivity();
+                    } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
+                        startEditProfileActivity();
+                    } else if (stringClicked.equalsIgnoreCase("My Trade Details")) {
+                        startTradeProfileActivity();
+                    } else if (stringClicked.equalsIgnoreCase("My Ratings")) {
+                        if (checkPreRatings()) {
+                            startMyRatingActivity();
+                        } else {
+                            showError("OOPS...!!!", "You do not have any ratings yet. Make your trade profile first");
+                        }
+                    } else if (stringClicked.equalsIgnoreCase("My Interests")) {
+                        startMyInterestActivityForTradesman();
                     }
-                } else if (stringClicked.equalsIgnoreCase("My Interests")) {
-                    startMyInterestActivityForTradesman();
+                }else {
+                    showError("Error" , "Internet connection is not available");
                 }
             }
         });
@@ -189,26 +207,33 @@ public class HomeActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 TextView textView = (TextView) viewClicked;
                 String stringClicked = textView.getText().toString();
-                if (stringClicked.equalsIgnoreCase("Log Out")) {
-                    humLogController.logOut();
-                    startLogInActivity();
-                } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
-                    startEditProfileActivity();
-                } else if (stringClicked.equalsIgnoreCase("Post Ad")) {
-                    startPostAdActivity();
-                } else if (stringClicked.equalsIgnoreCase("My Ad's")) {
-                    if(checkPreAd()){
-                        startMYAdActivity();
-                    }else {
-                        showError("OOPS...!!!" , "You do not have any ads posted. Go ahead, post one");
+                if(isNetworkAvailable()) {
+                    if (stringClicked.equalsIgnoreCase("Log Out")) {
+                        humLogController.logOut();
+                        startLogInActivity();
+                    } else if (stringClicked.equalsIgnoreCase("Edit Profile")) {
+                        startEditProfileActivity();
+                    } else if (stringClicked.equalsIgnoreCase("Post Ad")) {
+                        startPostAdActivity();
+                    } else if (stringClicked.equalsIgnoreCase("My Ad's")) {
+                        if (checkPreAd()) {
+                            startMYAdActivity();
+                        } else {
+                            showError("OOPS...!!!", "You do not have any ads posted. Go ahead, post one");
+                        }
+                    } else if (stringClicked.equalsIgnoreCase("My Interests")) {
+                        startMyInterestActivityForCustomer();
                     }
-                } else if (stringClicked.equalsIgnoreCase("My Interests")) {
-                    startMyInterestActivityForCustomer();
+                }else {
+                    showError("Error" , "Internet connection is not available");
                 }
             }
         });
     }
 
+    /**
+     * The method will set the action listener for the search button.
+     */
     private void setButtonAction(){
         bar = (ProgressBar) findViewById(R.id.progressBar1);
         searchList = (ListView) findViewById(R.id.searchResultRelativeLayout);
@@ -216,20 +241,24 @@ public class HomeActivity extends ActionBarActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bar.setVisibility(View.VISIBLE);
-                citySelected = citySpinner.getSelectedItem().toString();
-                tradeSelected= tradesSpinner.getSelectedItem().toString();
-                if(citySelected.equalsIgnoreCase("Select City")|| tradeSelected.equalsIgnoreCase("Select Trade")) {
-                   showError("Error" ,  "Select both city and trade");
-                    bar.setVisibility(View.GONE);
-                }else {
-                    if (userType.equalsIgnoreCase("customer")) {
-                        searchTradeProfiles();
+                if(isNetworkAvailable()) {
+                    bar.setVisibility(View.VISIBLE);
+                    citySelected = citySpinner.getSelectedItem().toString();
+                    tradeSelected = tradesSpinner.getSelectedItem().toString();
+                    if (citySelected.equalsIgnoreCase("Select City") || tradeSelected.equalsIgnoreCase("Select Trade")) {
+                        showError("Error", "Select both city and trade");
                         bar.setVisibility(View.GONE);
                     } else {
-                        searchAdvertisement();
-                        bar.setVisibility(View.GONE);
+                        if (userType.equalsIgnoreCase("customer")) {
+                            searchTradeProfiles();
+                            bar.setVisibility(View.GONE);
+                        } else {
+                            searchAdvertisement();
+                            bar.setVisibility(View.GONE);
+                        }
                     }
+                }else {
+                    showError("Error" , "Internet connection not available");
                 }
             }
         });
@@ -248,6 +277,9 @@ public class HomeActivity extends ActionBarActivity {
         startActivity(logInActivityIntent);
     }
 
+    /**
+     * The method will start the post ad activity.
+     */
     private void startPostAdActivity(){
         Intent postAdActivityIntent = new Intent(this, PostAdActivity.class);
         postAdActivityIntent.putExtra("username", username);
@@ -255,10 +287,17 @@ public class HomeActivity extends ActionBarActivity {
         startActivity(postAdActivityIntent);
     }
 
+    /**
+     * Check if this particular have atleast one Ad is posted by this user or not
+     * @return
+     */
     private boolean checkPreAd(){
         return humLogController.checkAdPosted(username);
     }
 
+    /**
+     * This method will start the edit profile activity to edit the profile.
+     */
     private void startEditProfileActivity(){
         Intent EditProfileActivityIntent = new Intent(this , EditProfileActivity.class);
         EditProfileActivityIntent.putExtra("username" , username);
@@ -269,6 +308,9 @@ public class HomeActivity extends ActionBarActivity {
         startActivity(EditProfileActivityIntent);
     }
 
+    /**
+     * This method will start the My Ad activity in which user can see what add he have posted before.
+     */
     private void startMYAdActivity(){
         Intent myAdActivityIntent = new Intent(this , MyAdActivity.class);
         myAdActivityIntent.putExtra("username" , username);
@@ -276,6 +318,10 @@ public class HomeActivity extends ActionBarActivity {
         startActivity(myAdActivityIntent);
     }
 
+    /**
+     * This method will start the activity, in which user can see the tradesman or customer he
+     * has shown interest.
+     */
     private void startMyInterestActivityForCustomer(){
         Intent myInterestActivityIntent = new Intent(this , MyInterestActivity.class);
         myInterestActivityIntent.putExtra("username" , username);
@@ -285,6 +331,9 @@ public class HomeActivity extends ActionBarActivity {
     }
 
 
+    /**
+     * The method will check to search the advertisements posted by customers.
+     */
     private void searchAdvertisement(){
         usernameList = new ArrayList<String>();
         usernameList = humLogController.getAdSearchResultUsernameList(citySelected, tradeSelected);
@@ -324,6 +373,7 @@ public class HomeActivity extends ActionBarActivity {
 
         }
     }
+
 
     private void startTradeProfileActivity(){
 
@@ -506,7 +556,6 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void setInterestedButtonAction(int position){
-
         String otherUsername = usernameList.get(position);
         humLogController.setRelations(username , otherUsername , citySelected , tradeSelected , userType);
     }
@@ -540,5 +589,26 @@ public class HomeActivity extends ActionBarActivity {
                 .setTitle(title).setPositiveButton("OK" , null);
         AlertDialog dialog = errorBuilder.create();
         dialog.show();
+    }
+
+    /**
+     * This method will check if internet is available or not
+     * This method is taken from stack overflow
+     * http://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
+     * @return boolean (whether internet connection is available or not)
+     */
+    private boolean isNetworkAvailable() {
+
+        Context context = this;
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        if(activeNetwork != null && activeNetwork.isConnected()){
+            return true;
+        }else {
+            return false;
+        }
     }
 }
